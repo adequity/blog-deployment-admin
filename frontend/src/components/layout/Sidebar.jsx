@@ -5,14 +5,10 @@ import {
   faUserCircle,
   faWallet,
   faCog,
-  faSignOutAlt,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../contexts/AuthContext';
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const { user, logout } = useAuth();
-
   const navItems = [
     { path: '/dashboard', icon: faHome, label: '대시보드' },
     { path: '/accounts', icon: faUserCircle, label: '계정 관리' },
@@ -40,10 +36,44 @@ const Sidebar = ({ isOpen, onClose }) => {
         </button>
 
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold gradient-text">
-            📝 Blog System
-          </h1>
+        <div className="p-6 border-b border-gray-200 flex items-center gap-3">
+          {/* Custom B + WiFi Logo */}
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* WiFi waves (deployment signal) */}
+            <path
+              d="M20 28C21.1046 28 22 27.1046 22 26C22 24.8954 21.1046 24 20 24C18.8954 24 18 24.8954 18 26C18 27.1046 18.8954 28 20 28Z"
+              fill="#4F46E5"
+            />
+            <path
+              d="M15 22C16.3261 20.2348 18.087 19 20 19C21.913 19 23.6739 20.2348 25 22"
+              stroke="#4F46E5"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M11 18C13.6522 14.6667 16.7391 13 20 13C23.2609 13 26.3478 14.6667 29 18"
+              stroke="#4F46E5"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            {/* Letter B */}
+            <text
+              x="20"
+              y="12"
+              fontSize="16"
+              fontWeight="bold"
+              fill="#4F46E5"
+              textAnchor="middle"
+            >
+              B
+            </text>
+          </svg>
         </div>
 
         {/* Navigation */}
@@ -62,23 +92,6 @@ const Sidebar = ({ isOpen, onClose }) => {
             </NavLink>
           ))}
         </nav>
-
-        {/* User Profile */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
-          <div className="mb-3">
-            <p className="text-sm font-medium text-gray-900">
-              {user?.username || '사용자'}
-            </p>
-            <p className="text-xs text-gray-500">{user?.email || ''}</p>
-          </div>
-          <button
-            onClick={logout}
-            className="w-full flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-          >
-            <FontAwesomeIcon icon={faSignOutAlt} />
-            <span>로그아웃</span>
-          </button>
-        </div>
       </aside>
     </>
   );

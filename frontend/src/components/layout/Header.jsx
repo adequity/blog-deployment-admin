@@ -1,9 +1,43 @@
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBell, faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBars,
+  faBell,
+  faSearch,
+  faChevronDown,
+  faCog,
+  faSignOutAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Header = ({ onMenuClick }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    setDropdownOpen(false);
+  };
+
+  const handleSettings = () => {
+    navigate('/settings');
+    setDropdownOpen(false);
+  };
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -41,14 +75,55 @@ const Header = ({ onMenuClick }) => {
             </span>
           </button>
 
-          {/* Profile */}
-          <div className="hidden sm:flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center text-white font-bold">
-              {user?.username?.charAt(0).toUpperCase() || 'U'}
-            </div>
-            <span className="text-sm font-medium text-gray-700 hidden lg:inline">
-              {user?.username || '사용자'}
-            </span>
+          {/* Profile Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center gap-2 hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors"
+            >
+              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center text-white font-bold">
+                {user?.username?.charAt(0).toUpperCase() || 'U'}
+              </div>
+              <span className="text-sm font-medium text-gray-700 hidden sm:inline">
+                {user?.username || '사용자'}
+              </span>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={`text-gray-500 text-xs transition-transform ${
+                  dropdownOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                {/* User Info */}
+                <div className="px-4 py-2 border-b border-gray-200">
+                  <p className="text-sm font-medium text-gray-900">
+                    {user?.username || '사용자'}
+                  </p>
+                  <p className="text-xs text-gray-500">{user?.email || ''}</p>
+                </div>
+
+                {/* Menu Items */}
+                <button
+                  onClick={handleSettings}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faCog} className="text-gray-500" />
+                  <span>설정</span>
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faSignOutAlt} className="text-gray-500" />
+                  <span>로그아웃</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
