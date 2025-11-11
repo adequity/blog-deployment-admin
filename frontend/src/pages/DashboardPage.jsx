@@ -13,11 +13,19 @@ import {
   faClock,
   faCalendarWeek,
   faCalendarAlt,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 const DashboardPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    platform: '네이버',
+    blogUrl: '',
+    apiKey: '',
+  });
 
   // Mock data - 실제로는 API에서 가져옵니다
   const revenueData = {
@@ -92,6 +100,27 @@ const DashboardPage = () => {
     return months;
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: API 연동
+    console.log('계정 추가:', formData);
+    setIsModalOpen(false);
+    setFormData({
+      name: '',
+      platform: '네이버',
+      blogUrl: '',
+      apiKey: '',
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -100,13 +129,13 @@ const DashboardPage = () => {
           <h1 className="text-3xl font-bold text-gray-900">대시보드</h1>
           <p className="mt-1 text-gray-600">블로그 수익 현황을 한눈에 확인하세요</p>
         </div>
-        <Link
-          to="/accounts/new"
-          className="btn-primary inline-flex items-center gap-2"
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-indigo-700 transition-colors inline-flex items-center gap-2"
         >
           <FontAwesomeIcon icon={faPlus} />
           <span>계정 추가</span>
-        </Link>
+        </button>
       </div>
 
       {/* Revenue Cards */}
@@ -244,6 +273,119 @@ const DashboardPage = () => {
           ))}
         </div>
       </div>
+
+      {/* Add Account Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900">블로그 계정 추가</h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FontAwesomeIcon icon={faTimes} size="lg" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {/* Account Name */}
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  계정 이름
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="예: 맛집 블로그"
+                  className="input-field"
+                  required
+                />
+              </div>
+
+              {/* Platform */}
+              <div>
+                <label htmlFor="platform" className="block text-sm font-medium text-gray-700 mb-2">
+                  플랫폼
+                </label>
+                <select
+                  id="platform"
+                  name="platform"
+                  value={formData.platform}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  required
+                >
+                  <option value="네이버">네이버 블로그</option>
+                  <option value="티스토리">티스토리</option>
+                  <option value="벨로그">벨로그</option>
+                  <option value="미디엄">미디엄</option>
+                  <option value="브런치">브런치</option>
+                </select>
+              </div>
+
+              {/* Blog URL */}
+              <div>
+                <label htmlFor="blogUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                  블로그 URL
+                </label>
+                <input
+                  type="url"
+                  id="blogUrl"
+                  name="blogUrl"
+                  value={formData.blogUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://blog.example.com"
+                  className="input-field"
+                  required
+                />
+              </div>
+
+              {/* API Key */}
+              <div>
+                <label htmlFor="apiKey" className="block text-sm font-medium text-gray-700 mb-2">
+                  API 키
+                </label>
+                <input
+                  type="password"
+                  id="apiKey"
+                  name="apiKey"
+                  value={formData.apiKey}
+                  onChange={handleInputChange}
+                  placeholder="블로그 API 키를 입력하세요"
+                  className="input-field"
+                  required
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  API 키는 블로그 플랫폼의 설정에서 발급받을 수 있습니다.
+                </p>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary flex-1"
+                >
+                  취소
+                </button>
+                <button
+                  type="submit"
+                  className="btn-primary flex-1"
+                >
+                  추가하기
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
