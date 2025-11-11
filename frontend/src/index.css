@@ -1,57 +1,73 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-gray-50 text-gray-900 antialiased;
-  }
+@theme {
+  --color-primary-indigo: #4f46e5;
+  --color-primary-purple: #9333ea;
+  --color-success: #10b981;
+  --color-info: #3b82f6;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 }
 
-@layer components {
-  .btn-primary {
-    @apply bg-gradient-primary text-white px-6 py-3 rounded-lg font-medium
-           hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl;
-  }
-
-  .btn-secondary {
-    @apply bg-white text-gray-700 px-6 py-3 rounded-lg font-medium
-           border border-gray-300 hover:bg-gray-50 transition-all duration-300;
-  }
-
-  .card {
-    @apply bg-white rounded-xl shadow-md hover:shadow-lg
-           transition-all duration-300 p-6;
-  }
-
-  .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg
-           focus:ring-2 focus:ring-primary-indigo focus:border-transparent
-           transition-all duration-200;
-  }
-
-  .nav-item {
-    @apply flex items-center gap-3 px-4 py-3 rounded-lg
-           text-gray-700 hover:bg-gray-100 transition-all duration-200
-           cursor-pointer;
-  }
-
-  .nav-item-active {
-    @apply bg-primary-indigo text-white hover:bg-primary-indigo;
-  }
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
 }
 
-@layer utilities {
-  .gradient-text {
-    @apply bg-gradient-primary bg-clip-text text-transparent;
-  }
+/* Buttons */
+.btn-primary {
+  @apply bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium;
+  @apply hover:bg-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl;
+}
 
-  .blur-bg {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+.btn-secondary {
+  @apply bg-white text-gray-700 px-6 py-3 rounded-lg font-medium;
+  @apply border border-gray-300 hover:bg-gray-50 transition-all duration-300;
+}
+
+/* Cards */
+.card {
+  @apply bg-white rounded-xl shadow-md hover:shadow-lg;
+  @apply transition-all duration-300 p-6;
+}
+
+/* Forms */
+.input-field {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg;
+  @apply focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+  @apply transition-all duration-200;
+}
+
+/* Navigation */
+.nav-item {
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg;
+  @apply text-gray-700 hover:bg-gray-100 transition-all duration-200;
+  @apply cursor-pointer;
+}
+
+.nav-item-active {
+  @apply bg-indigo-600 text-white hover:bg-indigo-600;
+}
+
+/* Utilities */
+.gradient-text {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600;
+  @apply bg-clip-text text-transparent;
+}
+
+.bg-gradient-primary {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600;
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 300ms ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
