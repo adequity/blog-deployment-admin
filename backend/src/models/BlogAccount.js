@@ -58,10 +58,10 @@ const BlogAccount = sequelize.define('BlogAccount', {
   tableName: 'blog_accounts',
   timestamps: true,
   indexes: [
-    { fields: ['userId'] },
-    { fields: ['platformId'] },
-    { fields: ['userId', 'platformId'] },
-    { fields: ['isActive'] },
+    { fields: ['user_id'] },
+    { fields: ['platform_id'] },
+    { fields: ['user_id', 'platform_id'] },
+    { fields: ['is_active'] },
   ],
 });
 

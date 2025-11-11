@@ -73,9 +73,9 @@ const PlatformField = sequelize.define('PlatformField', {
   tableName: 'platform_fields',
   timestamps: true,
   indexes: [
-    { fields: ['platformId'] },
-    { fields: ['platformId', 'fieldName'], unique: true },
-    { fields: ['displayOrder'] },
+    { fields: ['platform_id'] },
+    { fields: ['platform_id', 'field_name'], unique: true },
+    { fields: ['display_order'] },
   ],
 });
 

@@ -47,9 +47,9 @@ const AccountFieldData = sequelize.define('AccountFieldData', {
   tableName: 'account_field_data',
   timestamps: true,
   indexes: [
-    { fields: ['blogAccountId'] },
-    { fields: ['platformFieldId'] },
-    { fields: ['blogAccountId', 'platformFieldId'], unique: true },
+    { fields: ['blog_account_id'] },
+    { fields: ['platform_field_id'] },
+    { fields: ['blog_account_id', 'platform_field_id'], unique: true },
   ],
 });
 

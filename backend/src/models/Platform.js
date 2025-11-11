@@ -10,7 +10,6 @@ const Platform = sequelize.define('Platform', {
   name: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    unique: true,
     comment: '플랫폼 이름 (예: 네이버, 티스토리)',
   },
   displayName: {
@@ -48,8 +47,9 @@ const Platform = sequelize.define('Platform', {
   timestamps: true,
   indexes: [
     { fields: ['name'], unique: true },
-    { fields: ['isActive'] },
+    { fields: ['is_active'] },
   ],
 });
 
 export default Platform;
+

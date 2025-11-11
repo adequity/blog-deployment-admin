@@ -56,7 +56,7 @@ const startServer = async () => {
 
     // Sync database (in development only)
     if (process.env.NODE_ENV === 'development') {
-      await syncDatabase({ alter: true });
+      await syncDatabase({ force: true }); // 임시: 테이블 재생성
 
       // Seed initial data
       await seedPlatforms();
