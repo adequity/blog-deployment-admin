@@ -1,0 +1,230 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faDollarSign,
+  faChartLine,
+  faCalendar,
+  faWallet,
+  faArrowUp,
+  faArrowDown,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
+
+const DashboardPage = () => {
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  // Mock data - 실제로는 API에서 가져옵니다
+  const revenueData = {
+    today: 15000,
+    weekly: 105000,
+    monthly: 450000,
+    withdrawable: 360000, // 월 수익의 80%
+    monthlyChange: 12.5, // 전월 대비 증감률 (%)
+  };
+
+  const accounts = [
+    {
+      id: 1,
+      name: '맛집 블로그',
+      platform: '네이버',
+      icon: '📝',
+      postCount: 234,
+      dailyRevenue: 15000,
+      weeklyRevenue: 105000,
+      monthlyRevenue: 450000,
+    },
+    {
+      id: 2,
+      name: '여행 블로그',
+      platform: '티스토리',
+      icon: '💭',
+      postCount: 189,
+      dailyRevenue: 12000,
+      weeklyRevenue: 84000,
+      monthlyRevenue: 360000,
+    },
+    {
+      id: 3,
+      name: '개발 블로그',
+      platform: '벨로그',
+      icon: '🔧',
+      postCount: 156,
+      dailyRevenue: 8000,
+      weeklyRevenue: 56000,
+      monthlyRevenue: 240000,
+    },
+  ];
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('ko-KR', {
+      style: 'decimal',
+    }).format(amount);
+  };
+
+  const generateMonthOptions = () => {
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      months.push({
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        label: `${date.getFullYear()}년 ${date.getMonth() + 1}월`,
+      });
+    }
+    return months;
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">대시보드</h1>
+          <p className="mt-1 text-gray-600">블로그 수익 현황을 한눈에 확인하세요</p>
+        </div>
+        <Link
+          to="/accounts/new"
+          className="btn-primary inline-flex items-center gap-2"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          <span>계정 추가</span>
+        </Link>
+      </div>
+
+      {/* Revenue Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Today Revenue */}
+        <div className="card bg-gradient-to-br from-green-500 to-green-600 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-green-100 text-sm font-medium">오늘 수익</span>
+            <FontAwesomeIcon icon={faDollarSign} className="text-2xl" />
+          </div>
+          <p className="text-3xl font-bold">{formatCurrency(revenueData.today)}원</p>
+          <p className="text-green-100 text-sm mt-2">실시간 업데이트</p>
+        </div>
+
+        {/* Weekly Revenue */}
+        <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-blue-100 text-sm font-medium">주간 수익</span>
+            <FontAwesomeIcon icon={faChartLine} className="text-2xl" />
+          </div>
+          <p className="text-3xl font-bold">{formatCurrency(revenueData.weekly)}원</p>
+          <p className="text-blue-100 text-sm mt-2">최근 7일 합계</p>
+        </div>
+
+        {/* Monthly Revenue */}
+        <div className="card bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-purple-100 text-sm font-medium">월간 수익</span>
+            <FontAwesomeIcon icon={faCalendar} className="text-2xl" />
+          </div>
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-3xl font-bold">{formatCurrency(revenueData.monthly)}원</p>
+            <span
+              className={`flex items-center gap-1 text-sm font-medium ${
+                revenueData.monthlyChange >= 0 ? 'text-green-300' : 'text-red-300'
+              }`}
+            >
+              <FontAwesomeIcon
+                icon={revenueData.monthlyChange >= 0 ? faArrowUp : faArrowDown}
+              />
+              {Math.abs(revenueData.monthlyChange)}%
+            </span>
+          </div>
+          <select
+            value={`${selectedYear}-${selectedMonth}`}
+            onChange={(e) => {
+              const [year, month] = e.target.value.split('-');
+              setSelectedYear(parseInt(year));
+              setSelectedMonth(parseInt(month));
+            }}
+            className="text-sm bg-white bg-opacity-20 text-white border-white border-opacity-30 rounded px-2 py-1"
+          >
+            {generateMonthOptions().map((option) => (
+              <option
+                key={`${option.year}-${option.month}`}
+                value={`${option.year}-${option.month}`}
+                className="text-gray-900"
+              >
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Withdrawable */}
+        <div className="card bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-purple-100 text-sm font-medium">출금 가능</span>
+            <FontAwesomeIcon icon={faWallet} className="text-2xl" />
+          </div>
+          <p className="text-3xl font-bold">{formatCurrency(revenueData.withdrawable)}원</p>
+          <button className="mt-3 w-full bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+            출금 신청
+          </button>
+        </div>
+      </div>
+
+      {/* Accounts List */}
+      <div className="card">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900">블로그 계정</h2>
+          <Link to="/accounts" className="text-primary-indigo hover:underline text-sm font-medium">
+            전체 보기 →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {accounts.map((account) => (
+            <Link
+              key={account.id}
+              to={`/accounts/${account.id}`}
+              className="block p-4 border border-gray-200 rounded-lg hover:border-primary-indigo hover:shadow-md transition-all"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{account.icon}</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{account.name}</h3>
+                    <p className="text-sm text-gray-500">{account.platform}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">포스트</span>
+                  <span className="font-medium text-gray-900">{account.postCount}개</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">일간</span>
+                  <span className="font-medium text-green-600">
+                    {formatCurrency(account.dailyRevenue)}원
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">주간</span>
+                  <span className="font-medium text-blue-600">
+                    {formatCurrency(account.weeklyRevenue)}원
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">월간</span>
+                  <span className="font-medium text-purple-600">
+                    {formatCurrency(account.monthlyRevenue)}원
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardPage;
