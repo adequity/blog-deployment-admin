@@ -9,6 +9,10 @@ import {
   faArrowUp,
   faArrowDown,
   faPlus,
+  faFileAlt,
+  faClock,
+  faCalendarWeek,
+  faCalendarAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 const DashboardPage = () => {
@@ -203,28 +207,23 @@ const DashboardPage = () => {
                 </div>
               </div>
 
-              <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">포스트</span>
-                  <span className="font-medium text-gray-900">{account.postCount}개</span>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="flex items-center gap-1.5 text-gray-600">
+                  <FontAwesomeIcon icon={faFileAlt} className="text-gray-400" />
+                  <span className="font-medium text-gray-900">{account.postCount}</span>
+                  <span>포스트</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">일간</span>
-                  <span className="font-medium text-gray-900">
-                    {formatCurrency(account.dailyRevenue)}원
-                  </span>
+                <div className="flex items-center gap-1.5 text-gray-600">
+                  <FontAwesomeIcon icon={faClock} className="text-green-500" />
+                  <span className="font-medium text-gray-900">{formatCurrency(account.dailyRevenue)}원</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">주간</span>
-                  <span className="font-medium text-gray-900">
-                    {formatCurrency(account.weeklyRevenue)}원
-                  </span>
+                <div className="flex items-center gap-1.5 text-gray-600">
+                  <FontAwesomeIcon icon={faCalendarWeek} className="text-blue-500" />
+                  <span className="font-medium text-gray-900">{formatCurrency(account.weeklyRevenue)}원</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">월간</span>
-                  <span className="font-medium text-gray-900">
-                    {formatCurrency(account.monthlyRevenue)}원
-                  </span>
+                <div className="flex items-center gap-1.5 text-gray-600">
+                  <FontAwesomeIcon icon={faCalendarAlt} className="text-purple-500" />
+                  <span className="font-medium text-gray-900">{formatCurrency(account.monthlyRevenue)}원</span>
                 </div>
               </div>
             </Link>
