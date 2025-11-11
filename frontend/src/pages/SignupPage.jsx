@@ -115,14 +115,14 @@ const SignupPage = () => {
           <div className="relative">
             <FontAwesomeIcon
               icon={faUser}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
             />
             <input
               type="text"
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="input-field pl-10"
+              className="w-full px-4 py-3 pl-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               placeholder="아이디를 입력하세요"
               required
             />
@@ -137,14 +137,14 @@ const SignupPage = () => {
           <div className="relative">
             <FontAwesomeIcon
               icon={faEnvelope}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
             />
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="input-field pl-10"
+              className="w-full px-4 py-3 pl-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               placeholder="email@example.com"
               required
             />
@@ -159,14 +159,14 @@ const SignupPage = () => {
           <div className="relative">
             <FontAwesomeIcon
               icon={faPhone}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
             />
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="input-field pl-10"
+              className="w-full px-4 py-3 pl-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               placeholder="010-1234-5678"
               required
             />
@@ -181,14 +181,14 @@ const SignupPage = () => {
           <div className="relative">
             <FontAwesomeIcon
               icon={faLock}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
             />
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="input-field pl-10"
+              className="w-full px-4 py-3 pl-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               placeholder="최소 8자, 특수문자 포함"
               required
             />
@@ -218,14 +218,14 @@ const SignupPage = () => {
           <div className="relative">
             <FontAwesomeIcon
               icon={faLock}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
             />
             <input
               type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="input-field pl-10"
+              className="w-full px-4 py-3 pl-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               placeholder="비밀번호를 다시 입력하세요"
               required
             />
