@@ -95,43 +95,43 @@ const DashboardPage = () => {
       </div>
 
       {/* Revenue Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Today Revenue */}
-        <div className="card border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-gray-600 text-sm font-medium">오늘 수익</span>
-            <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
-              <FontAwesomeIcon icon={faDollarSign} className="text-green-600" />
+        <div className="card border border-gray-200 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-gray-600 text-xs font-medium">오늘 수익</span>
+            <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+              <FontAwesomeIcon icon={faDollarSign} className="text-green-600 text-sm" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatCurrency(revenueData.today)}원</p>
-          <p className="text-gray-500 text-sm mt-2">실시간 업데이트</p>
+          <p className="text-2xl font-bold text-gray-900">{formatCurrency(revenueData.today)}원</p>
+          <p className="text-gray-500 text-xs mt-1">실시간 업데이트</p>
         </div>
 
         {/* Weekly Revenue */}
-        <div className="card border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-gray-600 text-sm font-medium">주간 수익</span>
-            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-              <FontAwesomeIcon icon={faChartLine} className="text-blue-600" />
+        <div className="card border border-gray-200 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-gray-600 text-xs font-medium">주간 수익</span>
+            <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+              <FontAwesomeIcon icon={faChartLine} className="text-blue-600 text-sm" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatCurrency(revenueData.weekly)}원</p>
-          <p className="text-gray-500 text-sm mt-2">최근 7일 합계</p>
+          <p className="text-2xl font-bold text-gray-900">{formatCurrency(revenueData.weekly)}원</p>
+          <p className="text-gray-500 text-xs mt-1">최근 7일 합계</p>
         </div>
 
         {/* Monthly Revenue */}
-        <div className="card border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-gray-600 text-sm font-medium">월간 수익</span>
-            <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
-              <FontAwesomeIcon icon={faCalendar} className="text-purple-600" />
+        <div className="card border border-gray-200 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-gray-600 text-xs font-medium">월간 수익</span>
+            <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center">
+              <FontAwesomeIcon icon={faCalendar} className="text-purple-600 text-sm" />
             </div>
           </div>
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-3xl font-bold text-gray-900">{formatCurrency(revenueData.monthly)}원</p>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-2xl font-bold text-gray-900">{formatCurrency(revenueData.monthly)}원</p>
             <span
-              className={`flex items-center gap-1 text-sm font-medium ${
+              className={`flex items-center gap-1 text-xs font-medium ${
                 revenueData.monthlyChange >= 0 ? 'text-green-600' : 'text-red-600'
               }`}
             >
@@ -148,7 +148,7 @@ const DashboardPage = () => {
               setSelectedYear(parseInt(year));
               setSelectedMonth(parseInt(month));
             }}
-            className="text-sm bg-gray-50 text-gray-700 border border-gray-200 rounded px-2 py-1"
+            className="text-xs bg-gray-50 text-gray-700 border border-gray-200 rounded px-2 py-1"
           >
             {generateMonthOptions().map((option) => (
               <option
@@ -163,15 +163,15 @@ const DashboardPage = () => {
         </div>
 
         {/* Withdrawable */}
-        <div className="card border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-gray-600 text-sm font-medium">출금 가능</span>
-            <div className="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center">
-              <FontAwesomeIcon icon={faWallet} className="text-indigo-600" />
+        <div className="card border border-gray-200 p-4 relative">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-gray-600 text-xs font-medium">출금 가능</span>
+            <div className="w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center">
+              <FontAwesomeIcon icon={faWallet} className="text-indigo-600 text-sm" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatCurrency(revenueData.withdrawable)}원</p>
-          <button className="mt-3 w-full bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+          <p className="text-2xl font-bold text-gray-900 mb-6">{formatCurrency(revenueData.withdrawable)}원</p>
+          <button className="absolute bottom-4 right-4 bg-indigo-600 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-indigo-700 transition-colors">
             출금 신청
           </button>
         </div>
