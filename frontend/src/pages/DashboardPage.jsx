@@ -26,6 +26,17 @@ const DashboardPage = () => {
     monthly: 450000,
     withdrawable: 360000, // 월 수익의 80%
     monthlyChange: 12.5, // 전월 대비 증감률 (%)
+    lastUpdated: new Date(), // 마지막 업데이트 시간
+  };
+
+  // 마지막 업데이트 시간 포맷
+  const formatLastUpdated = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
   };
 
   const accounts = [
@@ -103,19 +114,19 @@ const DashboardPage = () => {
         {/* Today Revenue */}
         <div className="card border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600 text-xs font-medium">오늘 수익</span>
+            <span className="text-gray-900 text-xs font-bold">오늘 수익</span>
             <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
               <FontAwesomeIcon icon={faDollarSign} className="text-green-600 text-sm" />
             </div>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCurrency(revenueData.today)}원</p>
-          <p className="text-gray-500 text-xs mt-1">실시간 업데이트</p>
+          <p className="text-gray-500 text-xs mt-1">{formatLastUpdated(revenueData.lastUpdated)}</p>
         </div>
 
         {/* Weekly Revenue */}
         <div className="card border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600 text-xs font-medium">주간 수익</span>
+            <span className="text-gray-900 text-xs font-bold">주간 수익</span>
             <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
               <FontAwesomeIcon icon={faChartLine} className="text-blue-600 text-sm" />
             </div>
@@ -127,7 +138,7 @@ const DashboardPage = () => {
         {/* Monthly Revenue */}
         <div className="card border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600 text-xs font-medium">월간 수익</span>
+            <span className="text-gray-900 text-xs font-bold">월간 수익</span>
             <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center">
               <FontAwesomeIcon icon={faCalendar} className="text-purple-600 text-sm" />
             </div>
@@ -169,12 +180,15 @@ const DashboardPage = () => {
         {/* Withdrawable */}
         <div className="card border border-gray-200 p-4 relative">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600 text-xs font-medium">출금 가능</span>
+            <span className="text-gray-900 text-xs font-bold">출금 가능</span>
             <div className="w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center">
               <FontAwesomeIcon icon={faWallet} className="text-indigo-600 text-sm" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-6">{formatCurrency(revenueData.withdrawable)}원</p>
+          <p className="text-2xl font-bold text-gray-900">{formatCurrency(revenueData.withdrawable)}원</p>
+          <p className="text-gray-500 text-xs mt-1">
+            ({formatCurrency(Math.floor(revenueData.withdrawable * 0.967))}원)
+          </p>
           <button className="absolute bottom-4 right-4 bg-indigo-600 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-indigo-700 transition-colors">
             출금 신청
           </button>

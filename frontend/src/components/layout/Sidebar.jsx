@@ -36,43 +36,48 @@ const Sidebar = ({ isOpen, onClose }) => {
         </button>
 
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200 flex items-center gap-3">
+        <div className="p-6 border-b border-gray-200 flex justify-center">
           {/* Custom B + WiFi Logo */}
           <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
+            width="48"
+            height="48"
+            viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* WiFi waves (deployment signal) */}
+            {/* Gradient definition */}
+            <defs>
+              <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#4F46E5" />
+                <stop offset="100%" stopColor="#7C3AED" />
+              </linearGradient>
+            </defs>
+
+            {/* Background circle */}
+            <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" opacity="0.1" />
+
+            {/* WiFi waves (deployment signal) - smooth curves */}
+            <circle cx="24" cy="30" r="2.5" fill="url(#logoGradient)" />
             <path
-              d="M20 28C21.1046 28 22 27.1046 22 26C22 24.8954 21.1046 24 20 24C18.8954 24 18 24.8954 18 26C18 27.1046 18.8954 28 20 28Z"
-              fill="#4F46E5"
-            />
-            <path
-              d="M15 22C16.3261 20.2348 18.087 19 20 19C21.913 19 23.6739 20.2348 25 22"
-              stroke="#4F46E5"
-              strokeWidth="2"
+              d="M18 25C19.5 23 21.5 22 24 22C26.5 22 28.5 23 30 25"
+              stroke="url(#logoGradient)"
+              strokeWidth="2.5"
               strokeLinecap="round"
+              opacity="0.8"
             />
             <path
-              d="M11 18C13.6522 14.6667 16.7391 13 20 13C23.2609 13 26.3478 14.6667 29 18"
-              stroke="#4F46E5"
-              strokeWidth="2"
+              d="M14 20C16.5 17 19.5 15 24 15C28.5 15 31.5 17 34 20"
+              stroke="url(#logoGradient)"
+              strokeWidth="2.5"
               strokeLinecap="round"
+              opacity="0.6"
             />
-            {/* Letter B */}
-            <text
-              x="20"
-              y="12"
-              fontSize="16"
-              fontWeight="bold"
-              fill="#4F46E5"
-              textAnchor="middle"
-            >
-              B
-            </text>
+
+            {/* Letter B - integrated design */}
+            <path
+              d="M20 8 L20 14 L24 14 C26 14 27 13 27 11 C27 9 26 8 24 8 L20 8 Z M20 14 L20 20 L25 20 C27 20 28 19 28 17 C28 15 27 14 25 14 L20 14 Z"
+              fill="url(#logoGradient)"
+            />
           </svg>
         </div>
 
