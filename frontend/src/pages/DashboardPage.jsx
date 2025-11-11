@@ -21,10 +21,9 @@ const DashboardPage = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
     platform: '네이버',
-    blogUrl: '',
-    apiKey: '',
+    accountId: '',
+    accountPassword: '',
   });
 
   // Mock data - 실제로는 API에서 가져옵니다
@@ -114,10 +113,9 @@ const DashboardPage = () => {
     console.log('계정 추가:', formData);
     setIsModalOpen(false);
     setFormData({
-      name: '',
       platform: '네이버',
-      blogUrl: '',
-      apiKey: '',
+      accountId: '',
+      accountPassword: '',
     });
   };
 
@@ -276,8 +274,14 @@ const DashboardPage = () => {
 
       {/* Add Account Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-gray-900 bg-opacity-30 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-bold text-gray-900">블로그 계정 추가</h2>
@@ -291,23 +295,6 @@ const DashboardPage = () => {
 
             {/* Modal Body */}
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {/* Account Name */}
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  계정 이름
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="예: 맛집 블로그"
-                  className="input-field"
-                  required
-                />
-              </div>
-
               {/* Platform */}
               <div>
                 <label htmlFor="platform" className="block text-sm font-medium text-gray-700 mb-2">
@@ -329,41 +316,38 @@ const DashboardPage = () => {
                 </select>
               </div>
 
-              {/* Blog URL */}
+              {/* Account ID */}
               <div>
-                <label htmlFor="blogUrl" className="block text-sm font-medium text-gray-700 mb-2">
-                  블로그 URL
+                <label htmlFor="accountId" className="block text-sm font-medium text-gray-700 mb-2">
+                  계정 아이디
                 </label>
                 <input
-                  type="url"
-                  id="blogUrl"
-                  name="blogUrl"
-                  value={formData.blogUrl}
+                  type="text"
+                  id="accountId"
+                  name="accountId"
+                  value={formData.accountId}
                   onChange={handleInputChange}
-                  placeholder="https://blog.example.com"
+                  placeholder="플랫폼 계정 아이디를 입력하세요"
                   className="input-field"
                   required
                 />
               </div>
 
-              {/* API Key */}
+              {/* Account Password */}
               <div>
-                <label htmlFor="apiKey" className="block text-sm font-medium text-gray-700 mb-2">
-                  API 키
+                <label htmlFor="accountPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  계정 비밀번호
                 </label>
                 <input
                   type="password"
-                  id="apiKey"
-                  name="apiKey"
-                  value={formData.apiKey}
+                  id="accountPassword"
+                  name="accountPassword"
+                  value={formData.accountPassword}
                   onChange={handleInputChange}
-                  placeholder="블로그 API 키를 입력하세요"
+                  placeholder="플랫폼 계정 비밀번호를 입력하세요"
                   className="input-field"
                   required
                 />
-                <p className="mt-1 text-xs text-gray-500">
-                  API 키는 블로그 플랫폼의 설정에서 발급받을 수 있습니다.
-                </p>
               </div>
 
               {/* Modal Footer */}

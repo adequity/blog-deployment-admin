@@ -4,6 +4,8 @@ import accountRoutes from './account.routes.js';
 import revenueRoutes from './revenue.routes.js';
 import postRoutes from './post.routes.js';
 import userRoutes from './user.routes.js';
+import platformRoutes from './platformRoutes.js';
+import blogAccountRoutes from './blogAccountRoutes.js';
 
 const router = express.Router();
 
@@ -19,6 +21,8 @@ router.get('/', (req, res) => {
       revenue: `${req.baseUrl}/revenue`,
       posts: `${req.baseUrl}/posts`,
       users: `${req.baseUrl}/users`,
+      platforms: `${req.baseUrl}/platforms`,
+      blogAccounts: `${req.baseUrl}/blog-accounts`,
     },
     documentation: `${req.baseUrl}/docs`,
     health: '/health',
@@ -31,5 +35,7 @@ router.use('/accounts', accountRoutes);
 router.use('/revenue', revenueRoutes);
 router.use('/posts', postRoutes);
 router.use('/users', userRoutes);
+router.use('/platforms', platformRoutes);
+router.use('/blog-accounts', blogAccountRoutes);
 
 export default router;

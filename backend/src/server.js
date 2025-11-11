@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import { testConnection, syncDatabase } from './config/database.js';
 import routes from './routes/index.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { seedPlatforms } from './seeders/platformSeeder.js';
 
 // Load environment variables
 dotenv.config();
@@ -56,6 +57,9 @@ const startServer = async () => {
     // Sync database (in development only)
     if (process.env.NODE_ENV === 'development') {
       await syncDatabase({ alter: true });
+
+      // Seed initial data
+      await seedPlatforms();
     }
 
     // Start listening
