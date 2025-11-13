@@ -51,6 +51,15 @@ export const admin = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Moderator or Admin middleware
+export const moderator = asyncHandler(async (req, res, next) => {
+  if (req.user && (req.user.role === 'moderator' || req.user.role === 'admin')) {
+    next();
+  } else {
+    throw new AuthenticationError('Not authorized as moderator or admin');
+  }
+});
+
 // Generate JWT token
 export const generateToken = (userId) => {
   return jwt.sign(

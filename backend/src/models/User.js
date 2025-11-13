@@ -41,10 +41,10 @@ const User = sequelize.define('User', {
     defaultValue: true,
   },
   role: {
-    type: DataTypes.ENUM('user', 'admin'),
+    type: DataTypes.ENUM('user', 'moderator', 'admin'),
     defaultValue: 'user',
     allowNull: false,
-    comment: '사용자 권한 (user: 일반 사용자, admin: 관리자)',
+    comment: '사용자 권한 (user: 일반 사용자, moderator: 운영자/레퍼럴 관리자, admin: 관리자)',
   },
   last_login: {
     type: DataTypes.DATE,
@@ -96,12 +96,31 @@ const User = sequelize.define('User', {
     allowNull: true,
     comment: '신분증 인증 일시',
   },
+  // 레퍼럴 시스템
+  referred_by: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+    onDelete: 'SET NULL',
+    comment: '추천인 (moderator) ID',
+  },
+  referral_code: {
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    unique: true,
+    comment: 'Moderator가 사용할 고유 추천 코드',
+  },
 }, {
   tableName: 'users',
   indexes: [
     { fields: ['username'] },
     { fields: ['email'] },
     { fields: ['role'] },
+    { fields: ['referred_by'] },
+    { fields: ['referral_code'] },
   ],
 });
 

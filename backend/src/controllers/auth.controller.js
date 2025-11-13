@@ -15,7 +15,7 @@ export const signup = asyncHandler(async (req, res) => {
     throw new ValidationError(errors.array()[0].msg);
   }
 
-  const { username, email, phone, password } = req.body;
+  const { username, email, phone, password, referralCode } = req.body;
 
   // Check if user exists
   const existingUser = await User.findOne({
@@ -28,6 +28,25 @@ export const signup = asyncHandler(async (req, res) => {
     throw new ValidationError('Username or email already exists');
   }
 
+  // Check referral code if provided
+  let referredBy = null;
+  if (referralCode) {
+    const referrer = await User.findOne({
+      where: { referral_code: referralCode },
+    });
+
+    if (!referrer) {
+      throw new ValidationError('Invalid referral code');
+    }
+
+    // Check if referrer is a moderator or admin
+    if (referrer.role !== 'moderator' && referrer.role !== 'admin') {
+      throw new ValidationError('Referral code must belong to a moderator or admin');
+    }
+
+    referredBy = referrer.id;
+  }
+
   // Hash password
   const password_hash = await User.hashPassword(password);
 
@@ -37,6 +56,7 @@ export const signup = asyncHandler(async (req, res) => {
     email,
     phone,
     password_hash,
+    referred_by: referredBy,
   });
 
   // Generate token

@@ -8,6 +8,7 @@ import {
   faPhone,
   faCheckCircle,
   faTimesCircle,
+  faTicket,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -20,6 +21,7 @@ const SignupPage = () => {
     phone: '',
     password: '',
     confirmPassword: '',
+    referralCode: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -83,6 +85,7 @@ const SignupPage = () => {
       email: formData.email,
       phone: formData.phone,
       password: formData.password,
+      referralCode: formData.referralCode || undefined,
     });
 
     if (result.success) {
@@ -171,6 +174,30 @@ const SignupPage = () => {
               required
             />
           </div>
+        </div>
+
+        {/* Referral Code */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            추천 코드 (선택)
+          </label>
+          <div className="relative">
+            <FontAwesomeIcon
+              icon={faTicket}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+            />
+            <input
+              type="text"
+              name="referralCode"
+              value={formData.referralCode}
+              onChange={handleChange}
+              className="w-full px-4 py-3 pl-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+              placeholder="추천 코드가 있다면 입력하세요"
+            />
+          </div>
+          <p className="mt-1 text-xs text-gray-500">
+            운영자의 추천 코드를 입력하면 가입이 완료됩니다.
+          </p>
         </div>
 
         {/* Password */}
