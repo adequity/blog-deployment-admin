@@ -28,7 +28,7 @@ export const signup = asyncHandler(async (req, res) => {
     throw new ValidationError('Username or email already exists');
   }
 
-  // Check referral code if provided
+  // Check referral code if provided, otherwise assign default admin
   let referredBy = null;
   if (referralCode) {
     const referrer = await User.findOne({
@@ -45,6 +45,16 @@ export const signup = asyncHandler(async (req, res) => {
     }
 
     referredBy = referrer.id;
+  } else {
+    // If no referral code, assign default admin as referrer
+    const defaultAdmin = await User.findOne({
+      where: { role: 'admin' },
+      order: [['created_at', 'ASC']], // Get the first created admin
+    });
+
+    if (defaultAdmin) {
+      referredBy = defaultAdmin.id;
+    }
   }
 
   // Hash password
