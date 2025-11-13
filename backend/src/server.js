@@ -54,13 +54,19 @@ const startServer = async () => {
       throw new Error('Database connection failed');
     }
 
-    // Sync database (in development only)
-    if (process.env.NODE_ENV === 'development') {
+    // Sync database
+    // Use DB_RESET=true environment variable for one-time database reset
+    const shouldReset = process.env.DB_RESET === 'true';
+    if (shouldReset) {
+      console.log('⚠️  DB_RESET=true detected. Resetting database...');
+      await syncDatabase({ force: true });
+      console.log('✅ Database reset complete');
+    } else {
       await syncDatabase({ alter: false });
-
-      // Seed initial data
-      await seedPlatforms();
     }
+
+    // Seed initial data
+    await seedPlatforms();
 
     // Start listening
     app.listen(PORT, () => {
