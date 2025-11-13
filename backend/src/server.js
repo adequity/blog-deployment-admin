@@ -3,16 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
 import { testConnection, syncDatabase } from './config/database.js';
 import routes from './routes/index.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { seedPlatforms } from './seeders/platformSeeder.js';
 
-// Railway는 자동으로 환경변수를 주입하므로 로컬에서만 dotenv 사용
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
+// Railway는 환경변수를 자동으로 주입하므로 dotenv 불필요
 
 // Create Express app
 const app = express();
