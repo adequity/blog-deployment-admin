@@ -14,6 +14,10 @@ import {
   faPlus,
   faEdit,
   faTrash,
+  faEnvelope,
+  faLock,
+  faPhone,
+  faShieldAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -398,113 +402,150 @@ const AdminUsersPage = () => {
       {/* Create User Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">회원 추가</h2>
+          <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md animate-fade-in">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">회원 추가</h2>
             <form onSubmit={handleCreateUser}>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     사용자 이름 * <span className="text-xs text-gray-500">(3-50자, 중복 불가)</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    minLength={3}
-                    maxLength={50}
-                    value={formData.username}
-                    onChange={(e) =>
-                      setFormData({ ...formData, username: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                    placeholder="예: user123"
-                  />
+                  <div className="relative">
+                    <FontAwesomeIcon
+                      icon={faUserCheck}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                    />
+                    <input
+                      type="text"
+                      required
+                      minLength={3}
+                      maxLength={50}
+                      value={formData.username}
+                      onChange={(e) =>
+                        setFormData({ ...formData, username: e.target.value })
+                      }
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      placeholder="예: user123"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     이메일 * <span className="text-xs text-gray-500">(유효한 이메일, 중복 불가)</span>
                   </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                    placeholder="예: user@example.com"
-                  />
+                  <div className="relative">
+                    <FontAwesomeIcon
+                      icon={faEnvelope}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                    />
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      placeholder="예: user@example.com"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     전화번호 <span className="text-xs text-gray-500">(선택사항, 숫자와 -+() 만 가능)</span>
                   </label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    pattern="[0-9\-+()]*"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                    placeholder="예: 010-1234-5678"
-                  />
+                  <div className="relative">
+                    <FontAwesomeIcon
+                      icon={faPhone}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                    />
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      pattern="[0-9\-+()]*"
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      placeholder="예: 010-1234-5678"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     비밀번호 *
                   </label>
-                  <input
-                    type="password"
-                    required
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                  />
+                  <div className="relative">
+                    <FontAwesomeIcon
+                      icon={faLock}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                    />
+                    <input
+                      type="password"
+                      required
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      placeholder="비밀번호를 입력하세요"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     역할
                   </label>
-                  <select
-                    value={formData.role}
-                    onChange={(e) =>
-                      setFormData({ ...formData, role: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="user">사용자</option>
-                    <option value="admin">관리자</option>
-                  </select>
+                  <div className="relative">
+                    <FontAwesomeIcon
+                      icon={faShieldAlt}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                    />
+                    <select
+                      value={formData.role}
+                      onChange={(e) =>
+                        setFormData({ ...formData, role: e.target.value })
+                      }
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 appearance-none bg-white"
+                    >
+                      <option value="user">사용자</option>
+                      <option value="admin">관리자</option>
+                    </select>
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     추천 코드 <span className="text-xs text-gray-500">(선택사항, 중복 불가)</span>
                   </label>
-                  <input
-                    type="text"
-                    value={formData.referral_code}
-                    onChange={(e) =>
-                      setFormData({ ...formData, referral_code: e.target.value })
-                    }
-                    maxLength={20}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                    placeholder="예: REF2024"
-                  />
+                  <div className="relative">
+                    <FontAwesomeIcon
+                      icon={faTicket}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                    />
+                    <input
+                      type="text"
+                      value={formData.referral_code}
+                      onChange={(e) =>
+                        setFormData({ ...formData, referral_code: e.target.value })
+                      }
+                      maxLength={20}
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      placeholder="예: REF2024"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex gap-3 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200 font-medium"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium"
                 >
                   생성
                 </button>
