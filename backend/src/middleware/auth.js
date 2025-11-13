@@ -42,6 +42,15 @@ export const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Admin only middleware
+export const admin = asyncHandler(async (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    throw new AuthenticationError('Not authorized as admin');
+  }
+});
+
 // Generate JWT token
 export const generateToken = (userId) => {
   return jwt.sign(

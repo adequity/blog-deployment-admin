@@ -40,6 +40,12 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+  role: {
+    type: DataTypes.ENUM('user', 'admin'),
+    defaultValue: 'user',
+    allowNull: false,
+    comment: '사용자 권한 (user: 일반 사용자, admin: 관리자)',
+  },
   last_login: {
     type: DataTypes.DATE,
   },
@@ -48,6 +54,7 @@ const User = sequelize.define('User', {
   indexes: [
     { fields: ['username'] },
     { fields: ['email'] },
+    { fields: ['role'] },
   ],
 });
 
