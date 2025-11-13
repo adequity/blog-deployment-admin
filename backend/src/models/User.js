@@ -49,6 +49,53 @@ const User = sequelize.define('User', {
   last_login: {
     type: DataTypes.DATE,
   },
+  // 정산 정보
+  bank_name: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    comment: '은행명',
+  },
+  account_number: {
+    type: DataTypes.STRING(50),
+    allowNull: true,
+    comment: '계좌번호',
+  },
+  account_holder: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    comment: '예금주명',
+  },
+  // 신분 정보 (이미지 파일 업로드)
+  real_name: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    comment: '실명',
+  },
+  id_type: {
+    type: DataTypes.ENUM('resident_card', 'driver_license', 'passport'),
+    allowNull: true,
+    comment: '신분증 종류 (resident_card: 주민등록증, driver_license: 운전면허증, passport: 여권)',
+  },
+  id_image_url: {
+    type: DataTypes.STRING(500),
+    allowNull: true,
+    comment: '신분증 이미지 URL (S3/Cloudinary)',
+  },
+  id_image_key: {
+    type: DataTypes.STRING(500),
+    allowNull: true,
+    comment: '신분증 이미지 저장소 키 (삭제용)',
+  },
+  id_verified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    comment: '신분증 인증 여부',
+  },
+  id_verified_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '신분증 인증 일시',
+  },
 }, {
   tableName: 'users',
   indexes: [
@@ -66,6 +113,7 @@ User.prototype.comparePassword = async function(password) {
 User.prototype.toJSON = function() {
   const values = Object.assign({}, this.get());
   delete values.password_hash;
+  // 민감정보는 암호화된 상태로만 반환 (필요시 별도 복호화)
   return values;
 };
 

@@ -25,8 +25,8 @@ app.use(cors({
 }));
 app.use(compression()); // Compress responses
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined')); // Logging
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.json({ limit: '10mb' })); // Parse JSON bodies (증가된 제한: Base64 이미지 지원)
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
 
 // Health check endpoint
 app.get('/health', (req, res) => {
