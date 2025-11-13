@@ -3,12 +3,58 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
+import pkg from 'pg';
+const { Client } = pkg;
 import { testConnection, syncDatabase } from './config/database.js';
 import routes from './routes/index.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { seedPlatforms } from './seeders/platformSeeder.js';
 
 // Railway는 환경변수를 자동으로 주입하므로 dotenv 불필요
+
+/**
+ * PostgreSQL ENUM 타입 정리 함수
+ * 서버 시작 시 한 번만 실행되어 이전 ENUM 타입을 제거
+ */
+async function cleanupEnumTypes() {
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? {
+      rejectUnauthorized: false
+    } : false
+  });
+
+  try {
+    await client.connect();
+
+    // ENUM 타입 체크
+    const { rows } = await client.query(`
+      SELECT typname
+      FROM pg_type
+      WHERE typname IN ('enum_users_role', 'enum_users_id_type')
+      ORDER BY typname;
+    `);
+
+    if (rows.length > 0) {
+      console.log('🧹 Cleaning up obsolete ENUM types...');
+
+      // ENUM 타입 삭제
+      await client.query('DROP TYPE IF EXISTS enum_users_role CASCADE;');
+      await client.query('DROP TYPE IF EXISTS enum_users_id_type CASCADE;');
+
+      console.log('✅ ENUM types cleanup completed');
+    }
+
+    await client.end();
+  } catch (error) {
+    console.warn('⚠️ ENUM cleanup warning:', error.message);
+    try {
+      await client.end();
+    } catch (e) {
+      // Ignore cleanup error
+    }
+  }
+}
 
 // Create Express app
 const app = express();
@@ -66,6 +112,9 @@ const startServer = async () => {
     if (!dbConnected) {
       throw new Error('Database connection failed');
     }
+
+    // Clean up obsolete ENUM types (runs only once on startup)
+    await cleanupEnumTypes();
 
     // Verify database without auto-sync
     await syncDatabase();
