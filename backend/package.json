@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:reset": "node src/scripts/resetDatabase.js",
     "db:clean": "node src/scripts/cleanDatabase.js",
-    "db:migrate": "node src/scripts/migrateEnumToString.js"
+    "db:migrate": "node src/scripts/migrateEnumToString.js",
+    "db:cleanup-enums": "node src/scripts/cleanupEnums.js"
   },
   "keywords": [
     "blog",
