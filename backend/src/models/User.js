@@ -111,7 +111,7 @@ const User = sequelize.define('User', {
   indexes: [
     { fields: ['username'] },
     { fields: ['email'] },
-    // { fields: ['role'] }, // Temporarily disabled - will be added manually
+    { fields: ['role'] },
     { fields: ['referred_by'] },
     { fields: ['referral_code'] },
   ],
