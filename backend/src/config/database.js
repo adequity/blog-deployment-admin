@@ -38,10 +38,7 @@ export const testConnection = async () => {
 // Manual database sync without Sequelize's auto-sync
 export const syncDatabase = async (options = {}) => {
   try {
-    console.log('⚠️ Skipping Sequelize auto-sync to avoid ENUM issues');
-    console.log('✅ Database connection ready - using existing schema');
-
-    // Just verify tables exist, don't try to sync
+    // Check if tables exist
     const [tables] = await sequelize.query(`
       SELECT table_name
       FROM information_schema.tables
@@ -49,7 +46,11 @@ export const syncDatabase = async (options = {}) => {
     `);
 
     if (tables.length === 0) {
-      console.log('⚠️ Users table does not exist. Run migration script first.');
+      console.log('⚠️ Users table does not exist. Creating tables...');
+
+      // Run Sequelize sync to create tables
+      await sequelize.sync({ alter: false, force: false });
+      console.log('✅ Database tables created successfully');
     } else {
       console.log('✅ Users table exists');
 
