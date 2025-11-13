@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:reset": "node src/scripts/resetDatabase.js"
+    "db:reset": "node src/scripts/resetDatabase.js",
+    "db:clean": "node src/scripts/cleanDatabase.js"
   },
   "keywords": [
     "blog",
