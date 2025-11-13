@@ -56,7 +56,7 @@ const startServer = async () => {
 
     // Sync database (in development only)
     if (process.env.NODE_ENV === 'development') {
-      await syncDatabase({ alter: true });
+      await syncDatabase({ alter: false });
 
       // Seed initial data
       await seedPlatforms();

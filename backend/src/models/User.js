@@ -14,7 +14,6 @@ const User = sequelize.define('User', {
     unique: true,
     validate: {
       len: [3, 50],
-      isAlphanumeric: true,
     },
   },
   email: {

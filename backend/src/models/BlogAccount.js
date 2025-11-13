@@ -57,6 +57,7 @@ const BlogAccount = sequelize.define('BlogAccount', {
 }, {
   tableName: 'blog_accounts',
   timestamps: true,
+  underscored: true,
   indexes: [
     { fields: ['user_id'] },
     { fields: ['platform_id'] },
