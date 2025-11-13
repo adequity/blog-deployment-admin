@@ -39,6 +39,15 @@ export const testConnection = async () => {
 // Sync models with database
 export const syncDatabase = async (options = {}) => {
   try {
+    // Drop problematic ENUM types before syncing to avoid migration conflicts
+    try {
+      await sequelize.query('DROP TYPE IF EXISTS enum_users_role CASCADE;');
+      await sequelize.query('DROP TYPE IF EXISTS enum_users_id_type CASCADE;');
+      console.log('✅ Dropped ENUM types to prevent migration conflicts');
+    } catch (enumError) {
+      console.warn('⚠️ Could not drop ENUM types (may not exist yet):', enumError.message);
+    }
+
     await sequelize.sync(options);
     console.log('✅ Database synced successfully');
   } catch (error) {

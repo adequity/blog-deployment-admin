@@ -40,9 +40,12 @@ const User = sequelize.define('User', {
     defaultValue: true,
   },
   role: {
-    type: DataTypes.ENUM('user', 'moderator', 'admin'),
+    type: DataTypes.STRING(20),
     defaultValue: 'user',
     allowNull: false,
+    validate: {
+      isIn: [['user', 'moderator', 'admin']],
+    },
     comment: '사용자 권한 (user: 일반 사용자, moderator: 운영자/레퍼럴 관리자, admin: 관리자)',
   },
   last_login: {
@@ -71,8 +74,11 @@ const User = sequelize.define('User', {
     comment: '실명',
   },
   id_type: {
-    type: DataTypes.ENUM('resident_card', 'driver_license', 'passport'),
+    type: DataTypes.STRING(30),
     allowNull: true,
+    validate: {
+      isIn: [['resident_card', 'driver_license', 'passport']],
+    },
     comment: '신분증 종류 (resident_card: 주민등록증, driver_license: 운전면허증, passport: 여권)',
   },
   id_image_url: {
