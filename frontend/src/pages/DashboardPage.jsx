@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import api from '../utils/api';
 import {
   faDollarSign,
   faChartLine,
@@ -16,6 +15,7 @@ import {
   faCalendarAlt,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
+import api from '../utils/api';
 
 const DashboardPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
