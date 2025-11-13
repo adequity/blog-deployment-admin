@@ -12,7 +12,8 @@
     "db:clean": "node src/scripts/cleanDatabase.js",
     "db:migrate": "node src/scripts/migrateEnumToString.js",
     "db:cleanup-enums": "node src/scripts/cleanupEnums.js",
-    "db:drop-enums": "node src/scripts/dropEnumsDirectly.js"
+    "db:drop-enums": "node src/scripts/dropEnumsDirectly.js",
+    "db:create-admin": "node src/scripts/createAdminUser.js"
   },
   "keywords": [
     "blog",
