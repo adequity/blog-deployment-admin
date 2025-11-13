@@ -36,32 +36,26 @@ export const testConnection = async () => {
   }
 };
 
-// Sync models with database
+// Manual database sync without Sequelize's auto-sync
 export const syncDatabase = async (options = {}) => {
   try {
-    // Drop problematic ENUM types before syncing to avoid migration conflicts
-    try {
-      await sequelize.query('DROP TYPE IF EXISTS enum_users_role CASCADE;');
-      await sequelize.query('DROP TYPE IF EXISTS enum_users_id_type CASCADE;');
-      console.log('✅ Dropped ENUM types to prevent migration conflicts');
-    } catch (enumError) {
-      console.warn('⚠️ Could not drop ENUM types (may not exist yet):', enumError.message);
-    }
+    console.log('⚠️ Skipping Sequelize auto-sync to avoid ENUM issues');
+    console.log('✅ Database connection ready - using existing schema');
 
-    // Drop and recreate users table to ensure clean schema
-    if (options.force) {
-      try {
-        await sequelize.query('DROP TABLE IF EXISTS users CASCADE;');
-        console.log('✅ Dropped users table for clean recreation');
-      } catch (dropError) {
-        console.warn('⚠️ Could not drop users table:', dropError.message);
-      }
-    }
+    // Just verify tables exist, don't try to sync
+    const [tables] = await sequelize.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public' AND table_name = 'users';
+    `);
 
-    await sequelize.sync(options);
-    console.log('✅ Database synced successfully');
+    if (tables.length === 0) {
+      console.log('⚠️ Users table does not exist. Run migration script first.');
+    } else {
+      console.log('✅ Users table exists');
+    }
   } catch (error) {
-    console.error('❌ Database sync failed:', error.message);
+    console.error('❌ Database check failed:', error.message);
     throw error;
   }
 };
