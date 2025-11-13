@@ -6,6 +6,7 @@ import postRoutes from './post.routes.js';
 import userRoutes from './user.routes.js';
 import platformRoutes from './platformRoutes.js';
 import blogAccountRoutes from './blogAccountRoutes.js';
+import adminRoutes from './adminRoutes.js';
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.get('/', (req, res) => {
       users: `${req.baseUrl}/users`,
       platforms: `${req.baseUrl}/platforms`,
       blogAccounts: `${req.baseUrl}/blog-accounts`,
+      admin: `${req.baseUrl}/admin`,
     },
     documentation: `${req.baseUrl}/docs`,
     health: '/health',
@@ -37,5 +39,6 @@ router.use('/posts', postRoutes);
 router.use('/users', userRoutes);
 router.use('/platforms', platformRoutes);
 router.use('/blog-accounts', blogAccountRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;

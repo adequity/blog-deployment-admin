@@ -6,14 +6,23 @@ import {
   faWallet,
   faCog,
   faTimes,
+  faUsers,
+  faShieldAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Sidebar = ({ isOpen, onClose }) => {
+  const { user } = useAuth();
+
   const navItems = [
     { path: '/dashboard', icon: faHome, label: '대시보드' },
     { path: '/accounts', icon: faUserCircle, label: '계정 관리' },
     { path: '/revenue', icon: faWallet, label: '수익 관리' },
     { path: '/settings', icon: faCog, label: '설정' },
+  ];
+
+  const adminNavItems = [
+    { path: '/admin/users', icon: faUsers, label: '사용자 관리' },
   ];
 
   return (
@@ -96,6 +105,31 @@ const Sidebar = ({ isOpen, onClose }) => {
               <span>{item.label}</span>
             </NavLink>
           ))}
+
+          {/* Admin Section */}
+          {user && user.role === 'admin' && (
+            <>
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-500">
+                  <FontAwesomeIcon icon={faShieldAlt} />
+                  <span>관리자</span>
+                </div>
+              </div>
+              {adminNavItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={onClose}
+                  className={({ isActive }) =>
+                    `nav-item ${isActive ? 'nav-item-active' : ''}`
+                  }
+                >
+                  <FontAwesomeIcon icon={item.icon} />
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
+            </>
+          )}
         </nav>
       </aside>
     </>

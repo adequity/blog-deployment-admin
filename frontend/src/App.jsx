@@ -9,6 +9,7 @@ import AccountsPage from './pages/AccountsPage';
 import RevenuePage from './pages/RevenuePage';
 import SettingsPage from './pages/SettingsPage';
 import AccountDetailPage from './pages/AccountDetailPage';
+import AdminUsersPage from './pages/AdminUsersPage';
 
 // Layout
 import MainLayout from './components/layout/MainLayout';
@@ -35,6 +36,7 @@ function App() {
             <Route path="/accounts/:id" element={<AccountDetailPage />} />
             <Route path="/revenue" element={<RevenuePage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
           </Route>
 
           {/* Default Redirect */}
