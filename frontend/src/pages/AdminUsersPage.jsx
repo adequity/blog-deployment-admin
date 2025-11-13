@@ -404,21 +404,24 @@ const AdminUsersPage = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    사용자 이름 *
+                    사용자 이름 * <span className="text-xs text-gray-500">(3-50자, 중복 불가)</span>
                   </label>
                   <input
                     type="text"
                     required
+                    minLength={3}
+                    maxLength={50}
                     value={formData.username}
                     onChange={(e) =>
                       setFormData({ ...formData, username: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    placeholder="예: user123"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    이메일 *
+                    이메일 * <span className="text-xs text-gray-500">(유효한 이메일, 중복 불가)</span>
                   </label>
                   <input
                     type="email"
@@ -428,11 +431,12 @@ const AdminUsersPage = () => {
                       setFormData({ ...formData, email: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    placeholder="예: user@example.com"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    전화번호
+                    전화번호 <span className="text-xs text-gray-500">(선택사항, 숫자와 -+() 만 가능)</span>
                   </label>
                   <input
                     type="tel"
@@ -440,7 +444,9 @@ const AdminUsersPage = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
+                    pattern="[0-9\-+()]*"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    placeholder="예: 010-1234-5678"
                   />
                 </div>
                 <div>
@@ -474,7 +480,7 @@ const AdminUsersPage = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    추천 코드
+                    추천 코드 <span className="text-xs text-gray-500">(선택사항, 중복 불가)</span>
                   </label>
                   <input
                     type="text"
@@ -482,7 +488,9 @@ const AdminUsersPage = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, referral_code: e.target.value })
                     }
+                    maxLength={20}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    placeholder="예: REF2024"
                   />
                 </div>
               </div>
