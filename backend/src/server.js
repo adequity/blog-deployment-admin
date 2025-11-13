@@ -9,8 +9,10 @@ import routes from './routes/index.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { seedPlatforms } from './seeders/platformSeeder.js';
 
-// Load environment variables
-dotenv.config();
+// Railway는 자동으로 환경변수를 주입하므로 로컬에서만 dotenv 사용
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 // Create Express app
 const app = express();

@@ -1,7 +1,10 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-dotenv.config();
+// Railway는 자동으로 환경변수를 주입하므로 로컬에서만 dotenv 사용
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 const sequelize = new Sequelize({
   host: process.env.PGHOST || process.env.DB_HOST || 'localhost',
