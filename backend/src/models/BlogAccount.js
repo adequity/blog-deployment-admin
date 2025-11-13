@@ -17,7 +17,7 @@ const BlogAccount = sequelize.define('BlogAccount', {
       key: 'id',
     },
     onDelete: 'CASCADE',
-    comment: '사용자 ID',
+    comment: 'User ID',
   },
   platformId: {
     type: DataTypes.INTEGER,
@@ -27,27 +27,27 @@ const BlogAccount = sequelize.define('BlogAccount', {
       key: 'id',
     },
     onDelete: 'RESTRICT',
-    comment: '플랫폼 ID',
+    comment: 'Platform ID',
   },
   accountName: {
     type: DataTypes.STRING(200),
     allowNull: true,
-    comment: '계정 별칭 (사용자가 지정하는 이름)',
+    comment: 'Account alias (user-defined name)',
   },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
-    comment: '계정 활성화 여부',
+    comment: 'Account activation status',
   },
   lastSyncedAt: {
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '마지막 동기화 시간',
+    comment: 'Last synchronization time',
   },
   syncStatus: {
     type: DataTypes.ENUM('pending', 'syncing', 'success', 'failed'),
     defaultValue: 'pending',
-    comment: '동기화 상태',
+    comment: 'Synchronization status',
   },
   syncErrorMessage: {
     type: DataTypes.TEXT,
