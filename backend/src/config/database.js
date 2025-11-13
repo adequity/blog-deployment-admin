@@ -48,6 +48,16 @@ export const syncDatabase = async (options = {}) => {
       console.warn('⚠️ Could not drop ENUM types (may not exist yet):', enumError.message);
     }
 
+    // Drop and recreate users table to ensure clean schema
+    if (options.force) {
+      try {
+        await sequelize.query('DROP TABLE IF EXISTS users CASCADE;');
+        console.log('✅ Dropped users table for clean recreation');
+      } catch (dropError) {
+        console.warn('⚠️ Could not drop users table:', dropError.message);
+      }
+    }
+
     await sequelize.sync(options);
     console.log('✅ Database synced successfully');
   } catch (error) {
