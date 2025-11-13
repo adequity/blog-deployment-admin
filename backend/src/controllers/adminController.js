@@ -131,8 +131,8 @@ export const createUser = async (req, res) => {
     const newUser = await User.create({
       username,
       email,
-      phone: phone || null,
-      password: hashedPassword,
+      phone: phone || '',
+      password_hash: hashedPassword,
       role: role || 'user',
       referral_code: referral_code || null,
       is_active: true,
