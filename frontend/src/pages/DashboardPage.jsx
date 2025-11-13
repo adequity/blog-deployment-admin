@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import api from '../utils/api';
 import {
   faDollarSign,
   faChartLine,
@@ -20,11 +21,37 @@ const DashboardPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [accounts, setAccounts] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    platform: '네이버',
-    accountId: '',
-    accountPassword: '',
+    platformId: '',
+    accountName: '',
+    fields: {},
   });
+
+  // useEffect to fetch data on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch platforms
+        const platformsResponse = await api.get('/platforms');
+        setPlatforms(platformsResponse.data.data || []);
+
+        // Fetch blog accounts
+        const accountsResponse = await api.get('/blog-accounts');
+        setAccounts(accountsResponse.data.data || []);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Mock data - 실제로는 API에서 가져옵니다
   const revenueData = {
@@ -45,39 +72,6 @@ const DashboardPage = () => {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}.${month}.${day} ${hours}:${minutes}`;
   };
-
-  const accounts = [
-    {
-      id: 1,
-      name: '맛집 블로그',
-      platform: '네이버',
-      icon: '📝',
-      postCount: 234,
-      dailyRevenue: 15000,
-      weeklyRevenue: 105000,
-      monthlyRevenue: 450000,
-    },
-    {
-      id: 2,
-      name: '여행 블로그',
-      platform: '티스토리',
-      icon: '💭',
-      postCount: 189,
-      dailyRevenue: 12000,
-      weeklyRevenue: 84000,
-      monthlyRevenue: 360000,
-    },
-    {
-      id: 3,
-      name: '개발 블로그',
-      platform: '벨로그',
-      icon: '🔧',
-      postCount: 156,
-      dailyRevenue: 8000,
-      weeklyRevenue: 56000,
-      monthlyRevenue: 240000,
-    },
-  ];
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('ko-KR', {
@@ -107,16 +101,43 @@ const DashboardPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: API 연동
-    console.log('계정 추가:', formData);
-    setIsModalOpen(false);
-    setFormData({
-      platform: '네이버',
-      accountId: '',
-      accountPassword: '',
-    });
+
+    try {
+      const selectedPlatform = platforms.find(p => p.id === parseInt(formData.platformId));
+
+      if (!selectedPlatform) {
+        alert('플랫폼을 선택해주세요.');
+        return;
+      }
+
+      // Create blog account
+      const response = await api.post('/blog-accounts', {
+        platformId: parseInt(formData.platformId),
+        accountName: formData.accountName,
+        fields: formData.fields,
+      });
+
+      if (response.data.success) {
+        // Refresh accounts list
+        const accountsResponse = await api.get('/blog-accounts');
+        setAccounts(accountsResponse.data.data || []);
+
+        // Close modal and reset form
+        setIsModalOpen(false);
+        setFormData({
+          platformId: '',
+          accountName: '',
+          fields: {},
+        });
+
+        alert('블로그 계정이 추가되었습니다.');
+      }
+    } catch (error) {
+      console.error('Failed to create blog account:', error);
+      alert(error.response?.data?.message || '블로그 계정 추가에 실패했습니다.');
+    }
   };
 
   return (
@@ -231,45 +252,63 @@ const DashboardPage = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {accounts.map((account) => (
-            <Link
-              key={account.id}
-              to={`/accounts/${account.id}`}
-              className="block p-4 border border-gray-200 rounded-lg hover:border-primary-indigo hover:shadow-md transition-all"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{account.icon}</span>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{account.name}</h3>
-                    <p className="text-sm text-gray-500">{account.platform}</p>
+        {loading ? (
+          <div className="text-center py-8 text-gray-500">
+            로딩 중...
+          </div>
+        ) : accounts.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            등록된 블로그 계정이 없습니다. 계정을 추가해주세요.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {accounts.map((account) => (
+              <Link
+                key={account.id}
+                to={`/accounts/${account.id}`}
+                className="block p-4 border border-gray-200 rounded-lg hover:border-primary-indigo hover:shadow-md transition-all"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">📝</span>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{account.accountName || '이름 없음'}</h3>
+                      <p className="text-sm text-gray-500">{account.platform?.name || '플랫폼 정보 없음'}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="flex items-center gap-1.5 text-gray-600">
-                  <FontAwesomeIcon icon={faFileAlt} className="text-gray-400" />
-                  <span className="font-medium text-gray-900">{account.postCount}</span>
-                  <span>포스트</span>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-1.5 text-gray-600">
+                    <FontAwesomeIcon icon={faFileAlt} className="text-gray-400" />
+                    <span className="font-medium text-gray-900">0</span>
+                    <span>포스트</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-gray-600">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      account.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                    }`}>
+                      {account.isActive ? '활성' : '비활성'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-gray-600 col-span-2">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      account.syncStatus === 'success' ? 'bg-green-100 text-green-700' :
+                      account.syncStatus === 'failed' ? 'bg-red-100 text-red-700' :
+                      account.syncStatus === 'syncing' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-700'
+                    }`}>
+                      {account.syncStatus === 'success' ? '동기화 완료' :
+                       account.syncStatus === 'failed' ? '동기화 실패' :
+                       account.syncStatus === 'syncing' ? '동기화 중' :
+                       '대기 중'}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-gray-600">
-                  <FontAwesomeIcon icon={faClock} className="text-green-500" />
-                  <span className="font-medium text-gray-900">{formatCurrency(account.dailyRevenue)}원</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-gray-600">
-                  <FontAwesomeIcon icon={faCalendarWeek} className="text-blue-500" />
-                  <span className="font-medium text-gray-900">{formatCurrency(account.weeklyRevenue)}원</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-gray-600">
-                  <FontAwesomeIcon icon={faCalendarAlt} className="text-purple-500" />
-                  <span className="font-medium text-gray-900">{formatCurrency(account.monthlyRevenue)}원</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Add Account Modal */}
@@ -297,64 +336,86 @@ const DashboardPage = () => {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               {/* Platform */}
               <div>
-                <label htmlFor="platform" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="platformId" className="block text-sm font-medium text-gray-700 mb-2">
                   플랫폼
                 </label>
                 <select
-                  id="platform"
-                  name="platform"
-                  value={formData.platform}
+                  id="platformId"
+                  name="platformId"
+                  value={formData.platformId}
                   onChange={handleInputChange}
                   className="input-field"
                   required
                 >
-                  <option value="네이버">네이버 블로그</option>
-                  <option value="티스토리">티스토리</option>
-                  <option value="벨로그">벨로그</option>
-                  <option value="미디엄">미디엄</option>
-                  <option value="브런치">브런치</option>
+                  <option value="">플랫폼 선택</option>
+                  {platforms.map((platform) => (
+                    <option key={platform.id} value={platform.id}>
+                      {platform.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Account ID */}
+              {/* Account Name */}
               <div>
-                <label htmlFor="accountId" className="block text-sm font-medium text-gray-700 mb-2">
-                  계정 아이디
+                <label htmlFor="accountName" className="block text-sm font-medium text-gray-700 mb-2">
+                  계정 이름
                 </label>
                 <input
                   type="text"
-                  id="accountId"
-                  name="accountId"
-                  value={formData.accountId}
+                  id="accountName"
+                  name="accountName"
+                  value={formData.accountName}
                   onChange={handleInputChange}
-                  placeholder="플랫폼 계정 아이디를 입력하세요"
+                  placeholder="계정 이름을 입력하세요 (예: 내 블로그)"
                   className="input-field"
                   required
                 />
               </div>
 
-              {/* Account Password */}
-              <div>
-                <label htmlFor="accountPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                  계정 비밀번호
-                </label>
-                <input
-                  type="password"
-                  id="accountPassword"
-                  name="accountPassword"
-                  value={formData.accountPassword}
-                  onChange={handleInputChange}
-                  placeholder="플랫폼 계정 비밀번호를 입력하세요"
-                  className="input-field"
-                  required
-                />
-              </div>
+              {/* Dynamic Fields based on selected platform */}
+              {formData.platformId && platforms.find(p => p.id === parseInt(formData.platformId))?.fields?.map((field) => (
+                <div key={field.id}>
+                  <label htmlFor={`field-${field.fieldName}`} className="block text-sm font-medium text-gray-700 mb-2">
+                    {field.displayName}
+                    {!field.isRequired && ' (선택)'}
+                  </label>
+                  <input
+                    type={field.isEncrypted ? 'password' : 'text'}
+                    id={`field-${field.fieldName}`}
+                    name={field.fieldName}
+                    value={formData.fields[field.fieldName] || ''}
+                    onChange={(e) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        fields: {
+                          ...prev.fields,
+                          [field.fieldName]: e.target.value
+                        }
+                      }));
+                    }}
+                    placeholder={field.placeholder || `${field.displayName}을(를) 입력하세요`}
+                    className="input-field"
+                    required={field.isRequired}
+                  />
+                  {field.description && (
+                    <p className="mt-1 text-xs text-gray-500">{field.description}</p>
+                  )}
+                </div>
+              ))}
 
               {/* Modal Footer */}
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setFormData({
+                      platformId: '',
+                      accountName: '',
+                      fields: {},
+                    });
+                  }}
                   className="btn-secondary flex-1"
                 >
                   취소
