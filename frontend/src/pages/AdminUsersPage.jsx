@@ -255,8 +255,8 @@ const AdminUsersPage = () => {
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">사용자 관리</h1>
-          <p className="mt-1 text-gray-600">등록된 사용자를 관리하고 승인하세요</p>
+          <h1 className="text-2xl font-bold text-gray-900">사용자 관리</h1>
+          <p className="mt-1 text-sm text-gray-600">등록된 사용자를 관리하고 승인하세요</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -285,7 +285,7 @@ const AdminUsersPage = () => {
               <FontAwesomeIcon icon={faUsers} className="text-blue-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
         </div>
 
         <div className="card border border-gray-200 p-4">
@@ -295,7 +295,7 @@ const AdminUsersPage = () => {
               <FontAwesomeIcon icon={faUserCheck} className="text-green-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.active}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.active}</p>
         </div>
 
         <div className="card border border-gray-200 p-4">
@@ -305,7 +305,7 @@ const AdminUsersPage = () => {
               <FontAwesomeIcon icon={faUserSlash} className="text-red-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.inactive}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.inactive}</p>
         </div>
 
         <div className="card border border-gray-200 p-4">
@@ -315,7 +315,7 @@ const AdminUsersPage = () => {
               <FontAwesomeIcon icon={faShieldAlt} className="text-purple-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.admins}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.admins}</p>
         </div>
       </div>
 
@@ -331,21 +331,21 @@ const AdminUsersPage = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => handleBulkStatusUpdate(true)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 flex items-center gap-2"
+                className="px-4 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faCheck} />
                 일괄 활성화
               </button>
               <button
                 onClick={() => handleBulkStatusUpdate(false)}
-                className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-all duration-200 flex items-center gap-2"
+                className="px-4 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-all duration-200 flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faTimes} />
                 일괄 비활성화
               </button>
               <button
                 onClick={() => setSelectedUsers([])}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all duration-200"
+                className="px-4 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all duration-200"
               >
                 선택 해제
               </button>
@@ -367,7 +367,7 @@ const AdminUsersPage = () => {
               placeholder="이름, 이메일, 전화번호로 검색..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
 
@@ -379,7 +379,7 @@ const AdminUsersPage = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white"
+              className="pl-10 pr-8 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white"
             >
               <option value="all">전체 상태</option>
               <option value="active">활성</option>
@@ -395,7 +395,7 @@ const AdminUsersPage = () => {
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white"
+              className="pl-10 pr-8 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white"
             >
               <option value="all">전체 역할</option>
               <option value="user">사용자</option>
@@ -435,25 +435,25 @@ const AdminUsersPage = () => {
                       />
                     </button>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     사용자
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     연락처
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     추천 코드
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     역할
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     상태
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     가입일
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     작업
                   </th>
                 </tr>
@@ -461,7 +461,7 @@ const AdminUsersPage = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredUsers.map((u) => (
                   <tr key={u.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap w-12">
+                    <td className="px-6 py-3 whitespace-nowrap w-12">
                       <button
                         onClick={() => toggleUserSelection(u.id)}
                         className="text-indigo-600 hover:text-indigo-800"
@@ -471,7 +471,7 @@ const AdminUsersPage = () => {
                         />
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
                           <span className="text-indigo-600 font-semibold">
@@ -493,7 +493,7 @@ const AdminUsersPage = () => {
                         {u.referral_code || '-'}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded ${
                           u.role === 'admin'
@@ -506,7 +506,7 @@ const AdminUsersPage = () => {
                         {u.role === 'admin' ? '최고 관리자' : u.role === 'moderator' ? '관리자' : '사용자'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded ${
                           u.is_active
@@ -517,10 +517,10 @@ const AdminUsersPage = () => {
                         {u.is_active ? '활성' : '비활성'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                       {new Date(u.created_at).toLocaleDateString('ko-KR')}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
+                    <td className="px-6 py-3 whitespace-nowrap text-right text-sm font-medium relative">
                       <button
                         onClick={() =>
                           setShowActionMenu(showActionMenu === u.id ? null : u.id)
@@ -585,9 +585,9 @@ const AdminUsersPage = () => {
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md animate-fade-in">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">회원 추가</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">회원 추가</h2>
             <form onSubmit={handleCreateUser}>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     사용자 이름 * <span className="text-xs text-gray-500">(3-50자, 중복 불가)</span>
@@ -606,7 +606,7 @@ const AdminUsersPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, username: e.target.value })
                       }
-                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-2 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                       placeholder="예: user123"
                     />
                   </div>
@@ -627,7 +627,7 @@ const AdminUsersPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
-                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-2 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                       placeholder="예: user@example.com"
                     />
                   </div>
@@ -648,7 +648,7 @@ const AdminUsersPage = () => {
                         setFormData({ ...formData, phone: e.target.value })
                       }
                       pattern="[0-9\-+()]*"
-                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-2 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                       placeholder="예: 010-1234-5678"
                     />
                   </div>
@@ -669,7 +669,7 @@ const AdminUsersPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
                       }
-                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-2 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                       placeholder="비밀번호를 입력하세요"
                     />
                   </div>
@@ -688,7 +688,7 @@ const AdminUsersPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, role: e.target.value })
                       }
-                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 appearance-none bg-white"
+                      className="w-full px-4 py-2 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 appearance-none bg-white"
                     >
                       <option value="user">사용자</option>
                       <option value="moderator">관리자</option>
@@ -712,7 +712,7 @@ const AdminUsersPage = () => {
                         setFormData({ ...formData, referral_code: e.target.value })
                       }
                       maxLength={20}
-                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-2 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                       placeholder="예: REF2024"
                     />
                   </div>
@@ -722,13 +722,13 @@ const AdminUsersPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200 font-medium"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200 font-medium"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium"
+                  className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium"
                 >
                   생성
                 </button>
@@ -742,9 +742,9 @@ const AdminUsersPage = () => {
       {showEditModal && selectedUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">회원 정보 수정</h2>
+            <h2 className="text-xl font-bold mb-4">회원 정보 수정</h2>
             <form onSubmit={handleEditUser}>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     사용자 이름
@@ -852,7 +852,7 @@ const AdminUsersPage = () => {
       {showDeleteModal && selectedUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-red-600">회원 삭제</h2>
+            <h2 className="text-xl font-bold mb-4 text-red-600">회원 삭제</h2>
             <p className="text-gray-700 mb-6">
               정말로 <strong>{selectedUser.username}</strong> 사용자를 삭제하시겠습니까?
               <br />
@@ -880,15 +880,15 @@ const AdminUsersPage = () => {
       {showDetailModal && selectedUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6 text-indigo-600 flex items-center gap-2">
+            <h2 className="text-xl font-bold mb-6 text-indigo-600 flex items-center gap-2">
               <FontAwesomeIcon icon={faEye} />
               사용자 상세 정보
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
               {/* Basic Info */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-3 text-gray-800">기본 정보</h3>
+                <h3 className="font-semibold text-base mb-3 text-gray-800">기본 정보</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">사용자 ID</label>
@@ -939,7 +939,7 @@ const AdminUsersPage = () => {
 
               {/* Additional Info */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-3 text-gray-800">추가 정보</h3>
+                <h3 className="font-semibold text-base mb-3 text-gray-800">추가 정보</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">추천 코드</label>

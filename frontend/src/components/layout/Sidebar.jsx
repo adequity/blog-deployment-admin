@@ -93,7 +93,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="p-4 space-y-2">
+        <nav className="p-4 space-y-1">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -112,7 +112,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           {user && user.role === 'admin' && (
             <>
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-500">
+                <div className="flex items-center gap-2 px-4 py-1 text-xs font-medium text-gray-500">
                   <FontAwesomeIcon icon={faShieldAlt} />
                   <span>관리자</span>
                 </div>

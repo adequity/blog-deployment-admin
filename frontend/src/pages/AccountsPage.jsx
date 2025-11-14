@@ -244,8 +244,8 @@ const AccountsPage = () => {
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">계정 관리</h1>
-          <p className="mt-1 text-gray-600">블로그 플랫폼 계정을 관리하고 수익을 추적하세요</p>
+          <h1 className="text-2xl font-bold text-gray-900">계정 관리</h1>
+          <p className="mt-1 text-sm text-gray-600">블로그 플랫폼 계정을 관리하고 수익을 추적하세요</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -265,7 +265,7 @@ const AccountsPage = () => {
               <FontAwesomeIcon icon={faUserCircle} className="text-blue-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.totalAccounts}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.totalAccounts}</p>
         </div>
 
         <div className="card border border-gray-200 p-4">
@@ -275,7 +275,7 @@ const AccountsPage = () => {
               <FontAwesomeIcon icon={faCheckCircle} className="text-green-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.activeAccounts}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.activeAccounts}</p>
         </div>
 
         <div className="card border border-gray-200 p-4">
@@ -285,7 +285,7 @@ const AccountsPage = () => {
               <FontAwesomeIcon icon={faSync} className="text-orange-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.syncingAccounts}</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.syncingAccounts}</p>
         </div>
 
         <div className="card border border-gray-200 p-4">
@@ -295,7 +295,7 @@ const AccountsPage = () => {
               <FontAwesomeIcon icon={faWallet} className="text-purple-600" />
             </div>
           </div>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-2xl font-bold text-gray-900">
             {formatRevenue(stats.totalMonthlyRevenue)}
           </p>
         </div>
@@ -315,7 +315,7 @@ const AccountsPage = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="계정명, URL, 플랫폼 검색..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
 
@@ -328,7 +328,7 @@ const AccountsPage = () => {
             <select
               value={filterPlatform}
               onChange={(e) => setFilterPlatform(e.target.value)}
-              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white min-w-[150px]"
+              className="pl-10 pr-8 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white min-w-[150px]"
             >
               <option value="all">전체 플랫폼</option>
               {platforms.map((platform) => (
@@ -344,7 +344,7 @@ const AccountsPage = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="pl-4 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white min-w-[120px]"
+              className="pl-4 pr-8 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white min-w-[120px]"
             >
               <option value="all">전체 상태</option>
               <option value="active">활성</option>
@@ -357,7 +357,7 @@ const AccountsPage = () => {
             <select
               value={filterSyncStatus}
               onChange={(e) => setFilterSyncStatus(e.target.value)}
-              className="pl-4 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white min-w-[140px]"
+              className="pl-4 pr-8 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white min-w-[140px]"
             >
               <option value="all">전체 동기화</option>
               <option value="success">성공</option>
@@ -425,10 +425,10 @@ const AccountsPage = () => {
                       {platformColor.icon}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-sm text-gray-900">
                         {account.accountName || '이름 없음'}
                       </h3>
-                      <p className={`text-sm ${platformColor.text} font-medium`}>
+                      <p className={`text-xs ${platformColor.text} font-medium`}>
                         {account.platform?.displayName}
                       </p>
                     </div>
@@ -557,13 +557,13 @@ const AccountsPage = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => openDetailModal(account)}
-                    className="flex-1 px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-all duration-200 text-sm font-medium"
+                    className="flex-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-all duration-200 text-sm font-medium"
                   >
                     상세보기
                   </button>
                   <button
                     onClick={() => handleSync(account.id)}
-                    className="flex-1 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 text-sm font-medium"
+                    className="flex-1 px-3 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 text-sm font-medium"
                   >
                     <FontAwesomeIcon icon={faSync} className="mr-1" />
                     동기화
@@ -581,32 +581,32 @@ const AccountsPage = () => {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   {(user?.role === 'admin' || user?.role === 'moderator') && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       소유자
                     </th>
                   )}
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     플랫폼
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     계정명
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     URL
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     동기화 상태
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     포스트
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     월 수익
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     마지막 동기화
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     작업
                   </th>
                 </tr>
@@ -619,7 +619,7 @@ const AccountsPage = () => {
                   return (
                     <tr key={account.id} className="hover:bg-gray-50">
                       {(user?.role === 'admin' || user?.role === 'moderator') && (
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-3 whitespace-nowrap">
                           <div className="text-sm">
                             <div className="font-medium text-gray-900">
                               {account.user?.username || '-'}
@@ -630,7 +630,7 @@ const AccountsPage = () => {
                           </div>
                         </td>
                       )}
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-3 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <span className="text-xl">{platformColor.icon}</span>
                           <span className={`font-medium ${platformColor.text}`}>
@@ -638,12 +638,12 @@ const AccountsPage = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-3 whitespace-nowrap">
                         <div className="font-medium text-gray-900">
                           {account.accountName || '이름 없음'}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-3">
                         <a
                           href={account.url}
                           target="_blank"
@@ -654,7 +654,7 @@ const AccountsPage = () => {
                           <FontAwesomeIcon icon={faExternalLinkAlt} className="text-xs" />
                         </a>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-3 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded ${syncStyle.bg} ${syncStyle.text}`}
                         >
@@ -665,16 +665,16 @@ const AccountsPage = () => {
                           <span className="ml-1">{syncStyle.label}</span>
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                      <td className="px-6 py-3 whitespace-nowrap text-gray-900">
                         {account.postCount || 0}개
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap font-semibold text-indigo-600">
+                      <td className="px-6 py-3 whitespace-nowrap font-semibold text-indigo-600">
                         {formatRevenue(account.monthlyRevenue || 0)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                         {account.lastSyncedAt && formatTimeAgo(account.lastSyncedAt)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right relative">
+                      <td className="px-6 py-3 whitespace-nowrap text-right relative">
                         <button
                           onClick={() =>
                             setShowActionMenu(showActionMenu === account.id ? null : account.id)
@@ -749,7 +749,7 @@ const AccountsPage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-indigo-600 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-indigo-600 flex items-center gap-2">
                 <FontAwesomeIcon icon={faEye} />
                 계정 상세 정보
               </h2>
@@ -761,10 +761,10 @@ const AccountsPage = () => {
               </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
               {/* Basic Info */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-3 text-gray-800">기본 정보</h3>
+                <h3 className="font-semibold text-base mb-3 text-gray-800">기본 정보</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {selectedAccount.user && (user?.role === 'admin' || user?.role === 'moderator') && (
                     <div className="col-span-2">
@@ -821,7 +821,7 @@ const AccountsPage = () => {
 
               {/* Sync Info */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-3 text-gray-800">동기화 정보</h3>
+                <h3 className="font-semibold text-base mb-3 text-gray-800">동기화 정보</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">동기화 상태</label>
@@ -856,7 +856,7 @@ const AccountsPage = () => {
 
               {/* Revenue Info */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-3 text-gray-800">수익 통계</h3>
+                <h3 className="font-semibold text-base mb-3 text-gray-800">수익 통계</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">일 수익</label>
@@ -872,7 +872,7 @@ const AccountsPage = () => {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">월 수익</label>
-                    <p className="text-indigo-600 mt-1 font-semibold text-lg">
+                    <p className="text-indigo-600 mt-1 font-semibold text-base">
                       {formatRevenue(selectedAccount.monthlyRevenue || 0)}
                     </p>
                   </div>
@@ -905,7 +905,7 @@ const AccountsPage = () => {
       {showEditModal && selectedAccount && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-indigo-600">계정 수정</h2>
+            <h2 className="text-xl font-bold mb-4 text-indigo-600">계정 수정</h2>
             <p className="text-gray-600 mb-4">
               계정 수정 기능은 백엔드 API 연동 후 구현됩니다.
             </p>
@@ -923,7 +923,7 @@ const AccountsPage = () => {
       {showDeleteModal && selectedAccount && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-red-600 flex items-center gap-2">
+            <h2 className="text-xl font-bold mb-4 text-red-600 flex items-center gap-2">
               <FontAwesomeIcon icon={faExclamationTriangle} />
               계정 삭제
             </h2>
@@ -1030,7 +1030,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
     <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-indigo-600 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-indigo-600 flex items-center gap-2">
             <FontAwesomeIcon icon={faPlus} />
             계정 추가
           </h2>
@@ -1043,17 +1043,17 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Platform Selection */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
               플랫폼 <span className="text-red-500">*</span>
             </label>
             <select
               name="platformId"
               value={formData.platformId}
               onChange={handleChange}
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+              className={`w-full px-4 py-2 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                 errors.platformId ? 'border-red-500' : 'border-gray-300'
               } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
@@ -1076,7 +1076,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
 
           {/* Account Name */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
               계정명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -1085,7 +1085,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               value={formData.accountName}
               onChange={handleChange}
               placeholder="예: 내 블로그"
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+              className={`w-full px-4 py-2 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                 errors.accountName ? 'border-red-500' : 'border-gray-300'
               } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
@@ -1101,7 +1101,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
 
           {/* Username */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
               로그인 아이디 <span className="text-red-500">*</span>
             </label>
             <input
@@ -1110,7 +1110,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               value={formData.username}
               onChange={handleChange}
               placeholder={selectedPlatform ? `${selectedPlatform.displayName} 로그인 아이디` : '아이디를 입력하세요'}
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+              className={`w-full px-4 py-2 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                 errors.username ? 'border-red-500' : 'border-gray-300'
               } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
@@ -1133,7 +1133,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
               비밀번호 <span className="text-red-500">*</span>
             </label>
             <input
@@ -1142,7 +1142,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               value={formData.password}
               onChange={handleChange}
               placeholder="비밀번호"
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+              className={`w-full px-4 py-2 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                 errors.password ? 'border-red-500' : 'border-gray-300'
               } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
@@ -1162,7 +1162,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
 
           {/* URL */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
               블로그 URL <span className="text-red-500">*</span>
             </label>
             <input
@@ -1177,7 +1177,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
                 selectedPlatform?.name === 'brunch' ? 'https://brunch.co.kr/@아이디' :
                 'https://...'
               }
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+              className={`w-full px-4 py-2 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                 errors.url ? 'border-red-500' : 'border-gray-300'
               } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
@@ -1222,14 +1222,14 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors"
+              className="flex-1 px-6 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors"
               disabled={loading}
             >
               취소
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30"
+              className="flex-1 px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30"
               disabled={loading}
             >
               {loading ? (
