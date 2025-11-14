@@ -9,6 +9,7 @@ import {
 } from '../controllers/adminController.js';
 import { protect, admin } from '../middleware/auth.js';
 import User from '../models/User.js';
+import platformRoutes from './platform.routes.js';
 
 const router = express.Router();
 
@@ -81,5 +82,8 @@ router.patch('/users/:userId', updateUserStatus);
 
 // Delete user
 router.delete('/users/:userId', deleteUser);
+
+// Platform management routes
+router.use('/platforms', platformRoutes);
 
 export default router;

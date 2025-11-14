@@ -10,6 +10,7 @@ import RevenuePage from './pages/RevenuePage';
 import SettingsPage from './pages/SettingsPage';
 import AccountDetailPage from './pages/AccountDetailPage';
 import AdminUsersPage from './pages/AdminUsersPage';
+import AdminPlatformsPage from './pages/AdminPlatformsPage';
 
 // Layout
 import MainLayout from './components/layout/MainLayout';
@@ -37,6 +38,7 @@ function App() {
             <Route path="/revenue" element={<RevenuePage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/platforms" element={<AdminPlatformsPage />} />
           </Route>
 
           {/* Default Redirect */}

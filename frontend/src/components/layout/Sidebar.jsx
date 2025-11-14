@@ -8,6 +8,7 @@ import {
   faTimes,
   faUsers,
   faShieldAlt,
+  faServer,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -23,6 +24,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const adminNavItems = [
     { path: '/admin/users', icon: faUsers, label: '사용자 관리' },
+    { path: '/admin/platforms', icon: faServer, label: '플랫폼 관리' },
   ];
 
   return (
