@@ -1027,8 +1027,8 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
   const selectedPlatform = platforms.find(p => p.id === parseInt(formData.platformId));
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-indigo-600 flex items-center gap-2">
             <FontAwesomeIcon icon={faPlus} />
@@ -1043,17 +1043,19 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Platform Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               플랫폼 <span className="text-red-500">*</span>
             </label>
             <select
               name="platformId"
               value={formData.platformId}
               onChange={handleChange}
-              className={`input w-full ${errors.platformId ? 'border-red-500' : ''}`}
+              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+                errors.platformId ? 'border-red-500' : 'border-gray-300'
+              } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
               required
             >
@@ -1065,13 +1067,16 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               ))}
             </select>
             {errors.platformId && (
-              <p className="text-red-500 text-sm mt-1">{errors.platformId}</p>
+              <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-xs" />
+                {errors.platformId}
+              </p>
             )}
           </div>
 
           {/* Account Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               계정명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -1080,18 +1085,23 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               value={formData.accountName}
               onChange={handleChange}
               placeholder="예: 내 블로그"
-              className={`input w-full ${errors.accountName ? 'border-red-500' : ''}`}
+              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+                errors.accountName ? 'border-red-500' : 'border-gray-300'
+              } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
               required
             />
             {errors.accountName && (
-              <p className="text-red-500 text-sm mt-1">{errors.accountName}</p>
+              <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-xs" />
+                {errors.accountName}
+              </p>
             )}
           </div>
 
           {/* Username */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               로그인 아이디 <span className="text-red-500">*</span>
             </label>
             <input
@@ -1100,14 +1110,19 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               value={formData.username}
               onChange={handleChange}
               placeholder={selectedPlatform ? `${selectedPlatform.displayName} 로그인 아이디` : '아이디를 입력하세요'}
-              className={`input w-full ${errors.username ? 'border-red-500' : ''}`}
+              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+                errors.username ? 'border-red-500' : 'border-gray-300'
+              } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
               required
             />
             {errors.username && (
-              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+              <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-xs" />
+                {errors.username}
+              </p>
             )}
-            <p className="text-gray-500 text-xs mt-1">
+            <p className="text-gray-500 text-xs mt-2">
               {selectedPlatform?.name === 'naver' && '네이버 아이디를 입력하세요'}
               {selectedPlatform?.name === 'tistory' && '티스토리 이메일 또는 아이디를 입력하세요'}
               {selectedPlatform?.name === 'velog' && '벨로그 아이디를 입력하세요'}
@@ -1118,7 +1133,7 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               비밀번호 <span className="text-red-500">*</span>
             </label>
             <input
@@ -1127,22 +1142,27 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
               value={formData.password}
               onChange={handleChange}
               placeholder="비밀번호"
-              className={`input w-full ${errors.password ? 'border-red-500' : ''}`}
+              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+                errors.password ? 'border-red-500' : 'border-gray-300'
+              } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
               required
               autoComplete="new-password"
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-xs" />
+                {errors.password}
+              </p>
             )}
-            <p className="text-gray-500 text-xs mt-1">
+            <p className="text-gray-500 text-xs mt-2">
               비밀번호는 암호화되어 안전하게 저장됩니다
             </p>
           </div>
 
           {/* URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               블로그 URL <span className="text-red-500">*</span>
             </label>
             <input
@@ -1157,52 +1177,59 @@ const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
                 selectedPlatform?.name === 'brunch' ? 'https://brunch.co.kr/@아이디' :
                 'https://...'
               }
-              className={`input w-full ${errors.url ? 'border-red-500' : ''}`}
+              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
+                errors.url ? 'border-red-500' : 'border-gray-300'
+              } ${loading ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'}`}
               disabled={loading}
               required
             />
             {errors.url && (
-              <p className="text-red-500 text-sm mt-1">{errors.url}</p>
+              <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-xs" />
+                {errors.url}
+              </p>
             )}
           </div>
 
           {/* Active Status */}
-          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-3 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
             <input
               type="checkbox"
               name="isActive"
               id="isActive"
               checked={formData.isActive}
               onChange={handleChange}
-              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+              className="w-5 h-5 text-indigo-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500 cursor-pointer"
               disabled={loading}
             />
-            <label htmlFor="isActive" className="text-sm font-medium text-gray-700 cursor-pointer">
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-800 cursor-pointer select-none flex-1">
               활성 상태로 추가
             </label>
           </div>
 
           {/* Info Alert */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p className="text-sm text-blue-800">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2" />
-              계정 추가 후 자동으로 동기화가 시작됩니다. 로그인 정보가 올바른지 확인해주세요.
-            </p>
+          <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <FontAwesomeIcon icon={faExclamationTriangle} className="text-blue-600 mt-0.5" />
+              <p className="text-sm text-blue-800 leading-relaxed">
+                계정 추가 후 자동으로 동기화가 시작됩니다. 로그인 정보가 올바른지 확인해주세요.
+              </p>
+            </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors"
               disabled={loading}
             >
               취소
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30"
               disabled={loading}
             >
               {loading ? (
