@@ -233,6 +233,7 @@ const AdminUsersPage = () => {
     const matchesRole =
       filterRole === 'all' ||
       (filterRole === 'admin' && u.role === 'admin') ||
+      (filterRole === 'moderator' && u.role === 'moderator') ||
       (filterRole === 'user' && u.role === 'user');
 
     return matchesSearch && matchesStatus && matchesRole;
@@ -398,7 +399,8 @@ const AdminUsersPage = () => {
             >
               <option value="all">전체 역할</option>
               <option value="user">사용자</option>
-              <option value="admin">관리자</option>
+              <option value="moderator">관리자</option>
+              <option value="admin">최고 관리자</option>
             </select>
           </div>
         </div>
@@ -496,10 +498,12 @@ const AdminUsersPage = () => {
                         className={`px-2 py-1 text-xs font-medium rounded ${
                           u.role === 'admin'
                             ? 'bg-purple-100 text-purple-700'
+                            : u.role === 'moderator'
+                            ? 'bg-blue-100 text-blue-700'
                             : 'bg-gray-100 text-gray-700'
                         }`}
                       >
-                        {u.role === 'admin' ? '관리자' : '사용자'}
+                        {u.role === 'admin' ? '최고 관리자' : u.role === 'moderator' ? '관리자' : '사용자'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -687,7 +691,8 @@ const AdminUsersPage = () => {
                       className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 appearance-none bg-white"
                     >
                       <option value="user">사용자</option>
-                      <option value="admin">관리자</option>
+                      <option value="moderator">관리자</option>
+                      <option value="admin">최고 관리자</option>
                     </select>
                   </div>
                 </div>
