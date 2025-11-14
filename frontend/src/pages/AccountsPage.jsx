@@ -732,22 +732,16 @@ const AccountsPage = () => {
         </div>
       )}
 
-      {/* Add Account Modal Placeholder */}
+      {/* Add Account Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-indigo-600">계정 추가</h2>
-            <p className="text-gray-600 mb-4">
-              계정 추가 기능은 백엔드 API 연동 후 구현됩니다.
-            </p>
-            <button
-              onClick={() => setShowAddModal(false)}
-              className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-            >
-              닫기
-            </button>
-          </div>
-        </div>
+        <AddAccountModal
+          platforms={platforms}
+          onClose={() => setShowAddModal(false)}
+          onSuccess={() => {
+            setShowAddModal(false);
+            fetchAccounts();
+          }}
+        />
       )}
 
       {/* Detail Modal */}
@@ -956,6 +950,276 @@ const AccountsPage = () => {
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+// Add Account Modal Component
+const AddAccountModal = ({ platforms, onClose, onSuccess }) => {
+  const [formData, setFormData] = useState({
+    platformId: '',
+    accountName: '',
+    username: '',
+    password: '',
+    url: '',
+    isActive: true,
+  });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.platformId) {
+      newErrors.platformId = '플랫폼을 선택해주세요';
+    }
+    if (!formData.accountName || formData.accountName.trim() === '') {
+      newErrors.accountName = '계정명을 입력해주세요';
+    }
+    if (!formData.username || formData.username.trim() === '') {
+      newErrors.username = '로그인 아이디를 입력해주세요';
+    }
+    if (!formData.password || formData.password.trim() === '') {
+      newErrors.password = '비밀번호를 입력해주세요';
+    }
+    if (!formData.url || formData.url.trim() === '') {
+      newErrors.url = 'URL을 입력해주세요';
+    } else if (!/^https?:\/\/.+/.test(formData.url)) {
+      newErrors.url = '올바른 URL 형식이 아닙니다 (http:// 또는 https://로 시작)';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await api.post('/accounts', formData);
+      alert('계정이 성공적으로 추가되었습니다.');
+      onSuccess();
+    } catch (error) {
+      console.error('Failed to add account:', error);
+      alert(error.response?.data?.message || '계정 추가에 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const selectedPlatform = platforms.find(p => p.id === parseInt(formData.platformId));
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-indigo-600 flex items-center gap-2">
+            <FontAwesomeIcon icon={faPlus} />
+            계정 추가
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+            disabled={loading}
+          >
+            <FontAwesomeIcon icon={faTimes} size="lg" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Platform Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              플랫폼 <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="platformId"
+              value={formData.platformId}
+              onChange={handleChange}
+              className={`input w-full ${errors.platformId ? 'border-red-500' : ''}`}
+              disabled={loading}
+              required
+            >
+              <option value="">플랫폼을 선택하세요</option>
+              {platforms.map((platform) => (
+                <option key={platform.id} value={platform.id}>
+                  {platform.displayName}
+                </option>
+              ))}
+            </select>
+            {errors.platformId && (
+              <p className="text-red-500 text-sm mt-1">{errors.platformId}</p>
+            )}
+          </div>
+
+          {/* Account Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              계정명 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="accountName"
+              value={formData.accountName}
+              onChange={handleChange}
+              placeholder="예: 내 블로그"
+              className={`input w-full ${errors.accountName ? 'border-red-500' : ''}`}
+              disabled={loading}
+              required
+            />
+            {errors.accountName && (
+              <p className="text-red-500 text-sm mt-1">{errors.accountName}</p>
+            )}
+          </div>
+
+          {/* Username */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              로그인 아이디 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder={selectedPlatform ? `${selectedPlatform.displayName} 로그인 아이디` : '아이디를 입력하세요'}
+              className={`input w-full ${errors.username ? 'border-red-500' : ''}`}
+              disabled={loading}
+              required
+            />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+            )}
+            <p className="text-gray-500 text-xs mt-1">
+              {selectedPlatform?.name === 'naver' && '네이버 아이디를 입력하세요'}
+              {selectedPlatform?.name === 'tistory' && '티스토리 이메일 또는 아이디를 입력하세요'}
+              {selectedPlatform?.name === 'velog' && '벨로그 아이디를 입력하세요'}
+              {selectedPlatform?.name === 'brunch' && '브런치 아이디를 입력하세요'}
+              {!selectedPlatform && '플랫폼 로그인에 사용하는 아이디'}
+            </p>
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              비밀번호 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="비밀번호"
+              className={`input w-full ${errors.password ? 'border-red-500' : ''}`}
+              disabled={loading}
+              required
+              autoComplete="new-password"
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
+            <p className="text-gray-500 text-xs mt-1">
+              비밀번호는 암호화되어 안전하게 저장됩니다
+            </p>
+          </div>
+
+          {/* URL */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              블로그 URL <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="url"
+              name="url"
+              value={formData.url}
+              onChange={handleChange}
+              placeholder={
+                selectedPlatform?.name === 'naver' ? 'https://blog.naver.com/아이디' :
+                selectedPlatform?.name === 'tistory' ? 'https://블로그명.tistory.com' :
+                selectedPlatform?.name === 'velog' ? 'https://velog.io/@아이디' :
+                selectedPlatform?.name === 'brunch' ? 'https://brunch.co.kr/@아이디' :
+                'https://...'
+              }
+              className={`input w-full ${errors.url ? 'border-red-500' : ''}`}
+              disabled={loading}
+              required
+            />
+            {errors.url && (
+              <p className="text-red-500 text-sm mt-1">{errors.url}</p>
+            )}
+          </div>
+
+          {/* Active Status */}
+          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+            <input
+              type="checkbox"
+              name="isActive"
+              id="isActive"
+              checked={formData.isActive}
+              onChange={handleChange}
+              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+              disabled={loading}
+            />
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-700 cursor-pointer">
+              활성 상태로 추가
+            </label>
+          </div>
+
+          {/* Info Alert */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-800">
+              <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2" />
+              계정 추가 후 자동으로 동기화가 시작됩니다. 로그인 정보가 올바른지 확인해주세요.
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              disabled={loading}
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <FontAwesomeIcon icon={faSpinner} spin />
+                  추가 중...
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faCheck} />
+                  계정 추가
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
