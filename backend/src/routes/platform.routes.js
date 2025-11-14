@@ -7,12 +7,12 @@ import {
   updatePlatform,
   deletePlatform,
 } from '../controllers/platform.controller.js';
-import { protect, adminOnly } from '../middleware/auth.js';
+import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // All routes are protected and admin-only
-router.use(protect, adminOnly);
+router.use(protect, admin);
 
 // GET /api/v1/admin/platforms - Get all platforms
 router.get(
