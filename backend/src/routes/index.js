@@ -6,7 +6,7 @@ import postRoutes from './post.routes.js';
 import userRoutes from './user.routes.js';
 import platformRoutes from './platformRoutes.js';
 import blogAccountRoutes from './blogAccountRoutes.js';
-import adminRoutes from './admin.routes.js';
+import adminRoutes from './adminRoutes.js';
 
 const router = express.Router();
 
