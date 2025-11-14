@@ -16,10 +16,20 @@ const router = express.Router();
 router.post('/setup', async (req, res) => {
   try {
     const existingAdmin = await User.findOne({ where: { username: 'admin' } });
-    if (existingAdmin) {
-      return res.status(400).json({ success: false, message: 'Admin user already exists' });
-    }
     const password_hash = await User.hashPassword('admin123!@#');
+
+    if (existingAdmin) {
+      // Update existing admin password instead of returning error
+      existingAdmin.password_hash = password_hash;
+      await existingAdmin.save();
+      return res.json({
+        success: true,
+        message: 'Admin password updated successfully',
+        user: { username: existingAdmin.username, email: existingAdmin.email, role: existingAdmin.role }
+      });
+    }
+
+    // Create new admin if doesn't exist
     const admin = await User.create({
       username: 'admin',
       email: 'admin@example.com',
@@ -34,8 +44,8 @@ router.post('/setup', async (req, res) => {
       user: { username: admin.username, email: admin.email, role: admin.role }
     });
   } catch (error) {
-    console.error('Error creating admin:', error);
-    res.status(500).json({ success: false, message: 'Failed to create admin user', error: error.message });
+    console.error('Error creating/updating admin:', error);
+    res.status(500).json({ success: false, message: 'Failed to create/update admin user', error: error.message });
   }
 });
 
