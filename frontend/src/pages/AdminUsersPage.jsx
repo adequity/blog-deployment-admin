@@ -18,6 +18,10 @@ import {
   faLock,
   faPhone,
   faShieldAlt,
+  faDownload,
+  faEye,
+  faCheckSquare,
+  faSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -28,11 +32,14 @@ const AdminUsersPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterRole, setFilterRole] = useState('all');
   const [showActionMenu, setShowActionMenu] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -148,6 +155,70 @@ const AdminUsersPage = () => {
     setShowActionMenu(null);
   };
 
+  const openDetailModal = (u) => {
+    setSelectedUser(u);
+    setShowDetailModal(true);
+    setShowActionMenu(null);
+  };
+
+  const toggleUserSelection = (userId) => {
+    setSelectedUsers((prev) =>
+      prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedUsers.length === filteredUsers.length) {
+      setSelectedUsers([]);
+    } else {
+      setSelectedUsers(filteredUsers.map((u) => u.id));
+    }
+  };
+
+  const handleBulkStatusUpdate = async (isActive) => {
+    if (selectedUsers.length === 0) {
+      alert('선택된 사용자가 없습니다.');
+      return;
+    }
+
+    try {
+      await Promise.all(
+        selectedUsers.map((userId) =>
+          api.patch(`/admin/users/${userId}`, { is_active: isActive })
+        )
+      );
+      alert(`${selectedUsers.length}명의 사용자 상태가 업데이트되었습니다.`);
+      setSelectedUsers([]);
+      await fetchUsers();
+    } catch (error) {
+      console.error('Failed to bulk update users:', error);
+      alert(error.response?.data?.message || '일괄 업데이트에 실패했습니다.');
+    }
+  };
+
+  const handleExportToCSV = () => {
+    const csv = [
+      ['사용자명', '이메일', '전화번호', '역할', '상태', '추천코드', '가입일'].join(','),
+      ...filteredUsers.map((u) =>
+        [
+          u.username,
+          u.email,
+          u.phone || '',
+          u.role === 'admin' ? '관리자' : '사용자',
+          u.is_active ? '활성' : '비활성',
+          u.referral_code || '',
+          new Date(u.created_at).toLocaleDateString('ko-KR'),
+        ].join(',')
+      ),
+    ].join('\n');
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
   const filteredUsers = users.filter((u) => {
     const matchesSearch =
       u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -159,13 +230,19 @@ const AdminUsersPage = () => {
       (filterStatus === 'active' && u.is_active) ||
       (filterStatus === 'inactive' && !u.is_active);
 
-    return matchesSearch && matchesStatus;
+    const matchesRole =
+      filterRole === 'all' ||
+      (filterRole === 'admin' && u.role === 'admin') ||
+      (filterRole === 'user' && u.role === 'user');
+
+    return matchesSearch && matchesStatus && matchesRole;
   });
 
   const stats = {
     total: users.length,
     active: users.filter((u) => u.is_active).length,
     inactive: users.filter((u) => !u.is_active).length,
+    admins: users.filter((u) => u.role === 'admin').length,
   };
 
   if (!user || user.role !== 'admin') {
@@ -180,17 +257,26 @@ const AdminUsersPage = () => {
           <h1 className="text-3xl font-bold text-gray-900">사용자 관리</h1>
           <p className="mt-1 text-gray-600">등록된 사용자를 관리하고 승인하세요</p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="btn btn-primary flex items-center gap-2"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          회원 추가
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleExportToCSV}
+            className="btn btn-secondary flex items-center gap-2"
+          >
+            <FontAwesomeIcon icon={faDownload} />
+            CSV 내보내기
+          </button>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="btn btn-primary flex items-center gap-2"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            회원 추가
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-600 text-sm font-medium">전체 사용자</span>
@@ -220,7 +306,52 @@ const AdminUsersPage = () => {
           </div>
           <p className="text-3xl font-bold text-gray-900">{stats.inactive}</p>
         </div>
+
+        <div className="card border border-gray-200 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-gray-600 text-sm font-medium">관리자</span>
+            <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+              <FontAwesomeIcon icon={faShieldAlt} className="text-purple-600" />
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-gray-900">{stats.admins}</p>
+        </div>
       </div>
+
+      {/* Bulk Actions */}
+      {selectedUsers.length > 0 && (
+        <div className="card bg-indigo-50 border border-indigo-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-indigo-700 font-medium">
+                {selectedUsers.length}명 선택됨
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleBulkStatusUpdate(true)}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 flex items-center gap-2"
+              >
+                <FontAwesomeIcon icon={faCheck} />
+                일괄 활성화
+              </button>
+              <button
+                onClick={() => handleBulkStatusUpdate(false)}
+                className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-all duration-200 flex items-center gap-2"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+                일괄 비활성화
+              </button>
+              <button
+                onClick={() => setSelectedUsers([])}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all duration-200"
+              >
+                선택 해제
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="card">
@@ -254,6 +385,22 @@ const AdminUsersPage = () => {
               <option value="inactive">비활성</option>
             </select>
           </div>
+
+          <div className="relative">
+            <FontAwesomeIcon
+              icon={faShieldAlt}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            />
+            <select
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white"
+            >
+              <option value="all">전체 역할</option>
+              <option value="user">사용자</option>
+              <option value="admin">관리자</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -272,6 +419,20 @@ const AdminUsersPage = () => {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
+                  <th className="px-6 py-3 text-left w-12">
+                    <button
+                      onClick={toggleSelectAll}
+                      className="text-indigo-600 hover:text-indigo-800"
+                    >
+                      <FontAwesomeIcon
+                        icon={
+                          selectedUsers.length === filteredUsers.length && filteredUsers.length > 0
+                            ? faCheckSquare
+                            : faSquare
+                        }
+                      />
+                    </button>
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     사용자
                   </th>
@@ -298,6 +459,16 @@ const AdminUsersPage = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredUsers.map((u) => (
                   <tr key={u.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap w-12">
+                      <button
+                        onClick={() => toggleUserSelection(u.id)}
+                        className="text-indigo-600 hover:text-indigo-800"
+                      >
+                        <FontAwesomeIcon
+                          icon={selectedUsers.includes(u.id) ? faCheckSquare : faSquare}
+                        />
+                      </button>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
@@ -357,6 +528,13 @@ const AdminUsersPage = () => {
 
                       {showActionMenu === u.id && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                          <button
+                            onClick={() => openDetailModal(u)}
+                            className="w-full px-4 py-2 text-left text-sm text-indigo-600 hover:bg-gray-50 flex items-center gap-2"
+                          >
+                            <FontAwesomeIcon icon={faEye} />
+                            상세보기
+                          </button>
                           <button
                             onClick={() => openEditModal(u)}
                             className="w-full px-4 py-2 text-left text-sm text-blue-600 hover:bg-gray-50 flex items-center gap-2"
@@ -687,6 +865,111 @@ const AdminUsersPage = () => {
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
               >
                 삭제
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Detail User Modal */}
+      {showDetailModal && selectedUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-6 text-indigo-600 flex items-center gap-2">
+              <FontAwesomeIcon icon={faEye} />
+              사용자 상세 정보
+            </h2>
+
+            <div className="space-y-6">
+              {/* Basic Info */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-gray-800">기본 정보</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">사용자 ID</label>
+                    <p className="text-gray-900 mt-1">{selectedUser.id}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">사용자명</label>
+                    <p className="text-gray-900 mt-1">{selectedUser.username}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">이메일</label>
+                    <p className="text-gray-900 mt-1">{selectedUser.email}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">전화번호</label>
+                    <p className="text-gray-900 mt-1">{selectedUser.phone || '-'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">역할</label>
+                    <p className="mt-1">
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded ${
+                          selectedUser.role === 'admin'
+                            ? 'bg-purple-100 text-purple-700'
+                            : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        {selectedUser.role === 'admin' ? '관리자' : '사용자'}
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">상태</label>
+                    <p className="mt-1">
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded ${
+                          selectedUser.is_active
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {selectedUser.is_active ? '활성' : '비활성'}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Info */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-gray-800">추가 정보</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">추천 코드</label>
+                    <p className="text-gray-900 mt-1">{selectedUser.referral_code || '-'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">가입일</label>
+                    <p className="text-gray-900 mt-1">
+                      {new Date(selectedUser.created_at).toLocaleString('ko-KR')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">최근 수정일</label>
+                    <p className="text-gray-900 mt-1">
+                      {new Date(selectedUser.updated_at).toLocaleString('ko-KR')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">마지막 로그인</label>
+                    <p className="text-gray-900 mt-1">
+                      {selectedUser.last_login
+                        ? new Date(selectedUser.last_login).toLocaleString('ko-KR')
+                        : '로그인 기록 없음'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setShowDetailModal(false)}
+                className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all duration-200"
+              >
+                닫기
               </button>
             </div>
           </div>
