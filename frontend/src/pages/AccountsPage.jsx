@@ -64,7 +64,7 @@ const AccountsPage = () => {
   const fetchAccounts = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/accounts');
+      const response = await api.get('/blog-accounts');
       setAccounts(response.data.data || []);
     } catch (error) {
       console.error('Failed to fetch accounts:', error);
@@ -137,7 +137,7 @@ const AccountsPage = () => {
 
   const handleSync = async (accountId) => {
     try {
-      await api.post(`/accounts/${accountId}/sync`);
+      await api.post(`/blog-accounts/${accountId}/sync`);
       alert('동기화를 시작했습니다.');
       await fetchAccounts();
     } catch (error) {
@@ -148,7 +148,7 @@ const AccountsPage = () => {
 
   const handleToggleActive = async (accountId, isActive) => {
     try {
-      await api.patch(`/accounts/${accountId}/toggle`, { isActive: !isActive });
+      await api.patch(`/blog-accounts/${accountId}/toggle`, { isActive: !isActive });
       alert(`계정이 ${!isActive ? '활성화' : '비활성화'}되었습니다.`);
       await fetchAccounts();
     } catch (error) {
@@ -177,7 +177,7 @@ const AccountsPage = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/accounts/${selectedAccount.id}`);
+      await api.delete(`/blog-accounts/${selectedAccount.id}`);
       alert('계정이 삭제되었습니다.');
       setShowDeleteModal(false);
       await fetchAccounts();
