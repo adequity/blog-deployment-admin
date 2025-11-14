@@ -1,19 +1,67 @@
 import { validationResult } from 'express-validator';
 import { Op } from 'sequelize';
 import Account from '../models/Account.js';
+import User from '../models/User.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
 import { ValidationError, NotFoundError, AuthorizationError } from '../middleware/errorHandler.js';
 
-// @desc    Get all accounts for current user
+// Helper function to check account access authorization
+const checkAccountAuthorization = async (account, user) => {
+  if (user.role === 'admin') {
+    return true; // Admin can access all accounts
+  }
+
+  if (user.role === 'moderator') {
+    // Moderator can access own accounts and referred users' accounts
+    if (account.user_id === user.id) {
+      return true;
+    }
+    const accountOwner = await User.findByPk(account.user_id);
+    if (accountOwner && accountOwner.referred_by === user.id) {
+      return true;
+    }
+    return false;
+  }
+
+  // Regular user can only access own accounts
+  return account.user_id === user.id;
+};
+
+// @desc    Get all accounts based on user role
 // @route   GET /api/v1/accounts
 // @access  Private
 export const getAccounts = asyncHandler(async (req, res) => {
   const { platform, sort = 'updated', page = 1, limit = 20 } = req.query;
 
-  // Build filter
-  const where = { user_id: req.user.id };
-  if (platform) {
-    where.platform = platform;
+  // Build filter based on user role
+  let where = {};
+
+  if (req.user.role === 'admin') {
+    // Admin: 모든 계정 조회 (no filter)
+    if (platform) {
+      where.platform = platform;
+    }
+  } else if (req.user.role === 'moderator') {
+    // Moderator: 본인이 리퍼한 유저들의 계정 조회
+    // 1. 본인의 referral_code로 가입한 유저들 찾기
+    const referredUsers = await User.findAll({
+      where: { referred_by: req.user.id },
+      attributes: ['id'],
+    });
+
+    const referredUserIds = referredUsers.map(u => u.id);
+    // 2. 본인 + 리퍼한 유저들의 계정 조회
+    where.user_id = { [Op.in]: [req.user.id, ...referredUserIds] };
+
+    if (platform) {
+      where.platform = platform;
+    }
+  } else {
+    // User: 본인 계정만 조회
+    where.user_id = req.user.id;
+    if (platform) {
+      where.platform = platform;
+    }
   }
 
   // Build sort
@@ -28,13 +76,26 @@ export const getAccounts = asyncHandler(async (req, res) => {
   // Pagination
   const offset = (page - 1) * limit;
 
-  // Query
-  const { count, rows: accounts } = await Account.findAndCountAll({
+  // Query with user information for admin/moderator
+  const includeUser = req.user.role !== 'user';
+  const queryOptions = {
     where,
     order,
     limit: parseInt(limit),
     offset,
-  });
+  };
+
+  if (includeUser) {
+    queryOptions.include = [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'username', 'email', 'role'],
+      },
+    ];
+  }
+
+  const { count, rows: accounts } = await Account.findAndCountAll(queryOptions);
 
   res.json({
     success: true,
@@ -52,14 +113,23 @@ export const getAccounts = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/accounts/:id
 // @access  Private
 export const getAccount = asyncHandler(async (req, res) => {
-  const account = await Account.findByPk(req.params.id);
+  const account = await Account.findByPk(req.params.id, {
+    include: req.user.role !== 'user' ? [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'username', 'email', 'role'],
+      },
+    ] : [],
+  });
 
   if (!account) {
     throw new NotFoundError('Account not found');
   }
 
-  // Check ownership
-  if (account.user_id !== req.user.id) {
+  // Check authorization
+  const authorized = await checkAccountAuthorization(account, req.user);
+  if (!authorized) {
     throw new AuthorizationError('Not authorized to access this account');
   }
 
@@ -113,8 +183,9 @@ export const updateAccount = asyncHandler(async (req, res) => {
     throw new NotFoundError('Account not found');
   }
 
-  // Check ownership
-  if (account.user_id !== req.user.id) {
+  // Check authorization
+  const authorized = await checkAccountAuthorization(account, req.user);
+  if (!authorized) {
     throw new AuthorizationError('Not authorized to update this account');
   }
 
@@ -145,8 +216,9 @@ export const deleteAccount = asyncHandler(async (req, res) => {
     throw new NotFoundError('Account not found');
   }
 
-  // Check ownership
-  if (account.user_id !== req.user.id) {
+  // Check authorization
+  const authorized = await checkAccountAuthorization(account, req.user);
+  if (!authorized) {
     throw new AuthorizationError('Not authorized to delete this account');
   }
 
@@ -168,8 +240,9 @@ export const syncAccount = asyncHandler(async (req, res) => {
     throw new NotFoundError('Account not found');
   }
 
-  // Check ownership
-  if (account.user_id !== req.user.id) {
+  // Check authorization
+  const authorized = await checkAccountAuthorization(account, req.user);
+  if (!authorized) {
     throw new AuthorizationError('Not authorized to sync this account');
   }
 

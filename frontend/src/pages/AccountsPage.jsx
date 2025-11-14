@@ -580,6 +580,11 @@ const AccountsPage = () => {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
+                  {(user?.role === 'admin' || user?.role === 'moderator') && (
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      소유자
+                    </th>
+                  )}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     플랫폼
                   </th>
@@ -613,6 +618,18 @@ const AccountsPage = () => {
 
                   return (
                     <tr key={account.id} className="hover:bg-gray-50">
+                      {(user?.role === 'admin' || user?.role === 'moderator') && (
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm">
+                            <div className="font-medium text-gray-900">
+                              {account.user?.username || '-'}
+                            </div>
+                            {account.user && (
+                              <div className="text-xs text-gray-500">{account.user.email}</div>
+                            )}
+                          </div>
+                        </td>
+                      )}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <span className="text-xl">{platformColor.icon}</span>
@@ -755,6 +772,17 @@ const AccountsPage = () => {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-lg mb-3 text-gray-800">기본 정보</h3>
                 <div className="grid grid-cols-2 gap-4">
+                  {selectedAccount.user && (user?.role === 'admin' || user?.role === 'moderator') && (
+                    <div className="col-span-2">
+                      <label className="text-sm font-medium text-gray-600">계정 소유자</label>
+                      <p className="text-gray-900 mt-1">
+                        {selectedAccount.user.username} ({selectedAccount.user.email})
+                        <span className="ml-2 px-2 py-1 text-xs font-medium rounded bg-indigo-100 text-indigo-700">
+                          {selectedAccount.user.role}
+                        </span>
+                      </p>
+                    </div>
+                  )}
                   <div>
                     <label className="text-sm font-medium text-gray-600">플랫폼</label>
                     <p className="text-gray-900 mt-1">{selectedAccount.platform?.displayName}</p>
